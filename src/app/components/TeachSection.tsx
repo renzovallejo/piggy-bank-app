@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowLeft, ChevronDown, ChevronUp, ChevronRight } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, ChevronRight, Plus, Minus, X } from "lucide-react";
 import {
   CompassIcon,
   MapPinIcon,
@@ -19,6 +19,8 @@ import {
   ClockIcon,
   HeartHandIcon,
   PuzzleIcon,
+  PiggyIcon,
+  EditIcon,
 } from "./Icons";
 import type { IconProps } from "./Icons";
 import type { ComponentType } from "react";
@@ -423,8 +425,678 @@ function MissionsTab() {
   );
 }
 
+/* ══════════════════════════════════════════
+   CREATE SAVINGS GOAL FLOW
+   ══════════════════════════════════════════ */
+
+interface GoalCategory {
+  id: string;
+  label: string;
+  emoji: string;
+  Icon: ComponentType<IconProps>;
+  color: string;
+  suggestedMin: number;
+  suggestedMax: number;
+  suggestedWeeks: number;
+}
+
+const goalCategories: GoalCategory[] = [
+  { id: "toy", label: "Juguete", emoji: "🎮", Icon: GamepadIcon, color: "#7C3AED", suggestedMin: 15, suggestedMax: 30, suggestedWeeks: 3 },
+  { id: "book", label: "Libro", emoji: "📖", Icon: BookIcon, color: "#2563EB", suggestedMin: 10, suggestedMax: 20, suggestedWeeks: 2 },
+  { id: "gift", label: "Regalo", emoji: "🎁", Icon: GiftIcon, color: "#FF7849", suggestedMin: 15, suggestedMax: 25, suggestedWeeks: 3 },
+  { id: "trip", label: "Paseo", emoji: "🚲", Icon: BikeIcon, color: "#22c55e", suggestedMin: 20, suggestedMax: 40, suggestedWeeks: 4 },
+  { id: "custom", label: "Otra meta", emoji: "✨", Icon: StarIcon, color: "#f59e0b", suggestedMin: 10, suggestedMax: 50, suggestedWeeks: 3 },
+];
+
+const weekOptions = [1, 2, 3, 4, 5, 6, 7, 8];
+
+function CreateGoalFlow({ onClose }: { onClose: () => void }) {
+  const [step, setStep] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState<GoalCategory | null>(null);
+  const [customName, setCustomName] = useState("");
+  const [amount, setAmount] = useState(20);
+  const [weeks, setWeeks] = useState(3);
+  const [goalCreated, setGoalCreated] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const goalName = selectedCategory?.id === "custom"
+    ? (customName || "Mi meta especial")
+    : (selectedCategory?.label ?? "");
+
+  const weeklyDeposit = Math.ceil(amount / weeks);
+  const accentColor = selectedCategory?.color ?? "#FF7849";
+
+  function handleNext() {
+    if (step < 3) setStep(step + 1);
+    else {
+      setGoalCreated(true);
+      setStep(4);
+    }
+  }
+
+  function handleBack() {
+    if (step > 1) setStep(step - 1);
+  }
+
+  const canProceed =
+    (step === 1 && selectedCategory !== null && (selectedCategory.id !== "custom" || customName.trim().length > 0)) ||
+    (step === 2 && amount >= 1) ||
+    (step === 3);
+
+  // ── Step 1: Choose what to save for ──
+  function Step1() {
+    return (
+      <motion.div
+        key="step1"
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -40 }}
+        transition={{ duration: 0.25 }}
+      >
+        {/* Question */}
+        <div className="text-center mb-5">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 300, delay: 0.1 }}
+            className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-3"
+            style={{ backgroundColor: "#FF784910", boxShadow: shadowOutSm }}
+          >
+            <PiggyIcon size={32} color="#FF7849" strokeWidth={1.6} />
+          </motion.div>
+          <p className="text-sm" style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+            ¿Para qué quiere ahorrar Sofi?
+          </p>
+          <p className="text-xs mt-1" style={{ color: "#8a95a5" }}>
+            Elige una categoría o crea tu propia meta
+          </p>
+        </div>
+
+        {/* Category grid */}
+        <div className="grid grid-cols-3 gap-2.5 mb-4">
+          {goalCategories.slice(0, 4).map((cat, i) => {
+            const selected = selectedCategory?.id === cat.id;
+            return (
+              <motion.button
+                key={cat.id}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.15 + i * 0.06 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => { setSelectedCategory(cat); setAmount(cat.suggestedMin); setWeeks(cat.suggestedWeeks); }}
+                className="rounded-2xl p-3 flex flex-col items-center gap-2 transition-all"
+                style={{
+                  backgroundColor: selected ? `${cat.color}12` : bg,
+                  boxShadow: selected ? `0 0 0 2px ${cat.color}, ${shadowOutSm}` : shadowOutSm,
+                }}
+              >
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: selected ? cat.color : `${cat.color}10` }}>
+                  <cat.Icon size={20} color={selected ? "white" : cat.color} strokeWidth={1.8} />
+                </div>
+                <span className="text-xs" style={{ color: selected ? cat.color : "#2d3548", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
+                  {cat.label}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* Custom goal button */}
+        {(() => {
+          const custom = goalCategories[4];
+          const selected = selectedCategory?.id === "custom";
+          return (
+            <motion.button
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => {
+                setSelectedCategory(custom);
+                setAmount(custom.suggestedMin);
+                setWeeks(custom.suggestedWeeks);
+                setTimeout(() => inputRef.current?.focus(), 100);
+              }}
+              className="w-full rounded-2xl p-3.5 flex items-center gap-3 transition-all"
+              style={{
+                backgroundColor: selected ? `${custom.color}12` : bg,
+                boxShadow: selected ? `0 0 0 2px ${custom.color}, ${shadowOutSm}` : shadowOutSm,
+              }}
+            >
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                style={{ backgroundColor: selected ? custom.color : `${custom.color}10` }}>
+                <EditIcon size={18} color={selected ? "white" : custom.color} strokeWidth={1.8} />
+              </div>
+              <div className="flex-1 text-left">
+                <p className="text-xs" style={{ color: selected ? custom.color : "#2d3548", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
+                  Escribir mi propia meta
+                </p>
+                <p className="text-[11px]" style={{ color: "#b0b8c4" }}>Sofi decide para qué ahorrar</p>
+              </div>
+              <SparklesIcon size={14} color={selected ? custom.color : "#b0b8c4"} strokeWidth={1.8} />
+            </motion.button>
+          );
+        })()}
+
+        {/* Custom name input */}
+        <AnimatePresence>
+          {selectedCategory?.id === "custom" && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden"
+            >
+              <div className="mt-3 rounded-2xl p-3" style={{ backgroundColor: bg, boxShadow: shadowInset }}>
+                <label className="text-[11px] uppercase tracking-wider block mb-2"
+                  style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
+                  ¿Para qué quiere ahorrar?
+                </label>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={customName}
+                  onChange={(e) => setCustomName(e.target.value)}
+                  placeholder="Ej: Patines, peluche, crayones..."
+                  maxLength={40}
+                  className="w-full bg-transparent text-sm outline-none"
+                  style={{ color: "#2d3548", fontWeight: 500, fontFamily: "'Nunito Sans', sans-serif" }}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    );
+  }
+
+  // ── Step 2: Set amount ──
+  function Step2() {
+    const minAmount = 5;
+    const maxAmount = 100;
+
+    return (
+      <motion.div
+        key="step2"
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -40 }}
+        transition={{ duration: 0.25 }}
+      >
+        <div className="text-center mb-5">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 300, delay: 0.1 }}
+            className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-3"
+            style={{ backgroundColor: `${accentColor}10`, boxShadow: shadowOutSm }}
+          >
+            {selectedCategory && <selectedCategory.Icon size={32} color={accentColor} strokeWidth={1.6} />}
+          </motion.div>
+          <p className="text-sm" style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+            ¿Cuánto cuesta {goalName.toLowerCase()}?
+          </p>
+          <p className="text-xs mt-1" style={{ color: "#8a95a5" }}>
+            No te preocupes, puedes cambiarlo después
+          </p>
+        </div>
+
+        {/* Amount display */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="rounded-2xl p-5 mb-4 text-center"
+          style={{ backgroundColor: bg, boxShadow: shadowOut }}
+        >
+          <div className="flex items-center justify-center gap-3">
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setAmount(Math.max(minAmount, amount - 5))}
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{ backgroundColor: `${accentColor}10` }}
+            >
+              <Minus size={18} color={accentColor} strokeWidth={2.5} />
+            </motion.button>
+
+            <div>
+              <p className="text-[11px] uppercase tracking-wider mb-1" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
+                Meta de ahorro
+              </p>
+              <p className="text-3xl" style={{ color: accentColor, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                S/ {amount}
+              </p>
+            </div>
+
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setAmount(Math.min(maxAmount, amount + 5))}
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{ backgroundColor: `${accentColor}10` }}
+            >
+              <Plus size={18} color={accentColor} strokeWidth={2.5} />
+            </motion.button>
+          </div>
+
+          {/* Slider */}
+          <div className="mt-4 px-2">
+            <input
+              type="range"
+              min={minAmount}
+              max={maxAmount}
+              step={1}
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
+              className="w-full h-2 rounded-full appearance-none cursor-pointer"
+              style={{
+                background: `linear-gradient(to right, ${accentColor} ${((amount - minAmount) / (maxAmount - minAmount)) * 100}%, #e5e7eb ${((amount - minAmount) / (maxAmount - minAmount)) * 100}%)`,
+              }}
+            />
+            <div className="flex justify-between mt-1.5">
+              <span className="text-[11px]" style={{ color: "#b0b8c4" }}>S/ {minAmount}</span>
+              <span className="text-[11px]" style={{ color: "#b0b8c4" }}>S/ {maxAmount}</span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Quick amounts */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+        >
+          <p className="text-[11px] uppercase tracking-wider mb-2.5" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
+            Montos sugeridos
+          </p>
+          <div className="flex gap-2">
+            {[10, 20, 30, 50].map((val) => (
+              <motion.button
+                key={val}
+                whileTap={{ scale: 0.93 }}
+                onClick={() => setAmount(val)}
+                className="flex-1 rounded-xl py-2.5 text-xs transition-all"
+                style={{
+                  backgroundColor: amount === val ? accentColor : bg,
+                  color: amount === val ? "white" : "#5a7094",
+                  fontWeight: 600,
+                  fontFamily: "'Nunito Sans', sans-serif",
+                  boxShadow: amount === val ? `0 4px 12px ${accentColor}40` : shadowOutSm,
+                }}
+              >
+                S/ {val}
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+      </motion.div>
+    );
+  }
+
+  // ── Step 3: Set timeframe ──
+  function Step3() {
+    return (
+      <motion.div
+        key="step3"
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -40 }}
+        transition={{ duration: 0.25 }}
+      >
+        <div className="text-center mb-5">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 300, delay: 0.1 }}
+            className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-3"
+            style={{ backgroundColor: `${accentColor}10`, boxShadow: shadowOutSm }}
+          >
+            <ClockIcon size={32} color={accentColor} strokeWidth={1.6} />
+          </motion.div>
+          <p className="text-sm" style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+            ¿En cuántas semanas lo lograremos?
+          </p>
+          <p className="text-xs mt-1" style={{ color: "#8a95a5" }}>
+            Sofi ahorrará un poquito cada semana
+          </p>
+        </div>
+
+        {/* Week selector */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="rounded-2xl p-4 mb-4"
+          style={{ backgroundColor: bg, boxShadow: shadowOut }}
+        >
+          <div className="grid grid-cols-4 gap-2 mb-4">
+            {weekOptions.map((w) => (
+              <motion.button
+                key={w}
+                whileTap={{ scale: 0.93 }}
+                onClick={() => setWeeks(w)}
+                className="rounded-xl py-3 flex flex-col items-center gap-1 transition-all"
+                style={{
+                  backgroundColor: weeks === w ? accentColor : bg,
+                  boxShadow: weeks === w ? `0 4px 12px ${accentColor}40` : shadowOutSm,
+                }}
+              >
+                <span className="text-lg" style={{ color: weeks === w ? "white" : "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                  {w}
+                </span>
+                <span className="text-[10px]" style={{ color: weeks === w ? "rgba(255,255,255,0.8)" : "#b0b8c4", fontWeight: 500 }}>
+                  {w === 1 ? "semana" : "semanas"}
+                </span>
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Weekly deposit summary */}
+          <div className="rounded-xl p-3.5" style={{ backgroundColor: `${accentColor}08`, border: `1.5px dashed ${accentColor}30` }}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CoinIcon size={16} color={accentColor} strokeWidth={1.8} />
+                <span className="text-xs" style={{ color: "#5a7094", fontWeight: 500 }}>Ahorro semanal</span>
+              </div>
+              <span className="text-sm" style={{ color: accentColor, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                S/ {weeklyDeposit}
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Visual timeline preview */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="rounded-2xl p-4"
+          style={{ backgroundColor: bg, boxShadow: shadowOut }}
+        >
+          <p className="text-[11px] uppercase tracking-wider mb-3"
+            style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
+            Así se verá el progreso
+          </p>
+          {/* Progress bar preview */}
+          <div className="relative mb-3">
+            <div className="h-3 rounded-full overflow-hidden" style={{ backgroundColor: `${accentColor}15` }}>
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: "30%" }}
+                transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+                className="h-full rounded-full"
+                style={{ backgroundColor: accentColor }}
+              />
+            </div>
+            <div className="flex justify-between mt-1.5">
+              <span className="text-[11px]" style={{ color: "#b0b8c4" }}>S/ 0</span>
+              <span className="text-[11px]" style={{ color: accentColor, fontWeight: 600 }}>S/ {amount}</span>
+            </div>
+          </div>
+          {/* Week markers */}
+          <div className="flex items-center gap-1">
+            {Array.from({ length: Math.min(weeks, 8) }).map((_, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.5 + i * 0.08, type: "spring", stiffness: 400 }}
+                  className="w-4 h-4 rounded-full flex items-center justify-center"
+                  style={{
+                    backgroundColor: i === 0 ? accentColor : `${accentColor}20`,
+                    fontSize: 8,
+                    color: i === 0 ? "white" : accentColor,
+                    fontWeight: 700,
+                  }}
+                >
+                  {i + 1}
+                </motion.div>
+              </div>
+            ))}
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.5 + weeks * 0.08, type: "spring", stiffness: 400 }}
+              className="flex items-center justify-center"
+            >
+              <SparklesIcon size={14} color={accentColor} strokeWidth={2} />
+            </motion.div>
+          </div>
+        </motion.div>
+      </motion.div>
+    );
+  }
+
+  // ── Step 4: Celebration ──
+  function Step4() {
+    return (
+      <motion.div
+        key="step4"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        transition={{ duration: 0.35 }}
+        className="text-center"
+      >
+        {/* Confetti particles */}
+        <div className="relative h-32 mb-2">
+          {["🎉", "⭐", "🌟", "💰", "✨", "🎊", "💫", "🪙"].map((emoji, i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, y: 20, x: 0 }}
+              animate={{
+                opacity: [0, 1, 1, 0],
+                y: [20, -40 - Math.random() * 30, -60 - Math.random() * 30, -80],
+                x: [-40 + Math.random() * 80, -60 + Math.random() * 120, -40 + Math.random() * 80],
+              }}
+              transition={{ duration: 2, delay: i * 0.12, repeat: Infinity, repeatDelay: 2 }}
+              className="absolute text-lg"
+              style={{ left: `${20 + (i * 8)}%`, top: "60%" }}
+            >
+              {emoji}
+            </motion.span>
+          ))}
+
+          {/* Big checkmark */}
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full flex items-center justify-center"
+            style={{ backgroundColor: "#22c55e", boxShadow: "0 8px 24px rgba(34,197,94,0.4)" }}
+          >
+            <CheckCircleIcon size={40} color="white" strokeWidth={1.8} />
+          </motion.div>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <p className="text-lg mb-1" style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+            ¡Meta creada!
+          </p>
+          <p className="text-xs mb-5" style={{ color: "#8a95a5" }}>
+            Sofi ya puede empezar a ahorrar
+          </p>
+        </motion.div>
+
+        {/* Goal summary card */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55 }}
+          className="rounded-2xl p-5 mb-5 text-left"
+          style={{ backgroundColor: bg, boxShadow: shadowOut }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center"
+              style={{ backgroundColor: accentColor, boxShadow: `0 4px 12px ${accentColor}35` }}>
+              {selectedCategory && <selectedCategory.Icon size={24} color="white" strokeWidth={1.6} />}
+            </div>
+            <div className="flex-1">
+              <p className="text-sm" style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                {goalName}
+              </p>
+              <p className="text-xs" style={{ color: "#8a95a5" }}>Meta de Sofi</p>
+            </div>
+          </div>
+
+          {/* Stats grid */}
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: "Meta", value: `S/ ${amount}`, icon: TargetIcon },
+              { label: "Plazo", value: `${weeks} sem.`, icon: ClockIcon },
+              { label: "Semanal", value: `S/ ${weeklyDeposit}`, icon: CoinIcon },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 + i * 0.08 }}
+                className="rounded-xl p-2.5 text-center"
+                style={{ backgroundColor: `${accentColor}08` }}
+              >
+                <stat.icon size={14} color={accentColor} strokeWidth={1.8} className="mx-auto mb-1" />
+                <p className="text-xs" style={{ color: accentColor, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                  {stat.value}
+                </p>
+                <p className="text-[10px]" style={{ color: "#b0b8c4" }}>{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Progress bar at 0% */}
+          <div className="mt-4">
+            <div className="flex justify-between mb-1.5">
+              <span className="text-[11px]" style={{ color: "#8a95a5", fontWeight: 500 }}>Progreso</span>
+              <span className="text-[11px]" style={{ color: accentColor, fontWeight: 600 }}>0%</span>
+            </div>
+            <div className="h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: `${accentColor}15` }}>
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: "3%" }}
+                transition={{ delay: 0.9, duration: 0.5 }}
+                className="h-full rounded-full"
+                style={{ backgroundColor: accentColor }}
+              />
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Motivational tip */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.85 }}
+          className="rounded-2xl p-3.5 mb-5 flex items-start gap-2.5 text-left"
+          style={{ backgroundColor: "#fffbeb", border: "1px solid #fef3c7" }}
+        >
+          <HeartHandIcon size={16} color="#f59e0b" strokeWidth={1.8} className="shrink-0 mt-0.5" />
+          <p className="text-xs" style={{ color: "#92400e", lineHeight: 1.55 }}>
+            Cada vez que Sofi deposite dinero, verá cómo la barra avanza. ¡Celebra con ella cada progreso!
+          </p>
+        </motion.div>
+
+        {/* CTA */}
+        <motion.button
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.95 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={onClose}
+          className="w-full rounded-2xl p-4 flex items-center justify-center gap-2.5"
+          style={{ backgroundColor: "#22c55e", boxShadow: "6px 6px 16px rgba(34,197,94,0.3), -4px -4px 12px #ffffff" }}
+        >
+          <SparklesIcon size={18} color="white" strokeWidth={1.8} />
+          <span style={{ color: "white", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>
+            ¡Vamos a lograrlo, Sofi!
+          </span>
+        </motion.button>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      {/* Header */}
+      {step < 4 && (
+        <div className="flex items-center gap-3 mb-5">
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={step === 1 ? onClose : handleBack}
+            className="w-9 h-9 rounded-xl flex items-center justify-center"
+            style={{ backgroundColor: bg, boxShadow: shadowOutSm }}
+          >
+            {step === 1 ? <X size={16} color="#8a95a5" /> : <ArrowLeft size={16} color="#8a95a5" />}
+          </motion.button>
+          <div className="flex-1">
+            <p className="text-xs" style={{ color: "#8a95a5", fontWeight: 500 }}>
+              Paso {step} de 3
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Step indicator */}
+      {step < 4 && (
+        <div className="flex gap-1.5 mb-5">
+          {[1, 2, 3].map((s) => (
+            <motion.div
+              key={s}
+              className="h-1 rounded-full flex-1"
+              style={{ backgroundColor: s <= step ? accentColor : `${accentColor}20` }}
+              animate={{ backgroundColor: s <= step ? accentColor : `${accentColor}20` }}
+              transition={{ duration: 0.3 }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Step content */}
+      <AnimatePresence mode="wait">
+        {step === 1 && <Step1 />}
+        {step === 2 && <Step2 />}
+        {step === 3 && <Step3 />}
+        {step === 4 && <Step4 />}
+      </AnimatePresence>
+
+      {/* Next button (steps 1-3) */}
+      {step < 4 && (
+        <motion.button
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={handleNext}
+          disabled={!canProceed}
+          className="w-full rounded-2xl p-4 flex items-center justify-center gap-2 mt-5 transition-all"
+          style={{
+            backgroundColor: canProceed ? accentColor : "#e5e7eb",
+            boxShadow: canProceed ? `6px 6px 16px ${accentColor}30, -4px -4px 12px #ffffff` : "none",
+            opacity: canProceed ? 1 : 0.6,
+          }}
+        >
+          <span style={{ color: "white", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>
+            {step === 3 ? "Crear meta" : "Siguiente"}
+          </span>
+          {step < 3 && <ChevronRight size={16} color="white" strokeWidth={2.5} />}
+          {step === 3 && <CheckCircleIcon size={16} color="white" strokeWidth={2} />}
+        </motion.button>
+      )}
+    </motion.div>
+  );
+}
+
 /* ── Goals Tab (educational + create) ── */
-function GoalsTab() {
+function GoalsTab({ onCreateGoal }: { onCreateGoal: () => void }) {
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}>
       {/* Hero intro */}
@@ -555,6 +1227,7 @@ function GoalsTab() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
         whileTap={{ scale: 0.97 }}
+        onClick={onCreateGoal}
         className="w-full rounded-2xl p-4 flex items-center justify-center gap-2.5 transition-all"
         style={{
           backgroundColor: "#FF7849",
@@ -667,80 +1340,125 @@ interface Props {
 
 export function TeachSection({ onBack }: Props) {
   const [activeTab, setActiveTab] = useState<TabId>("misiones");
+  const [showCreateGoal, setShowCreateGoal] = useState(false);
 
   return (
-    <div className="pb-8">
-      {/* Header */}
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3 mb-1">
-        <button onClick={onBack} className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: bg }}>
-          <ArrowLeft size={18} color="#2d3548" />
-        </button>
-        <div className="flex-1">
-          <p style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>Enseñar a Sofi</p>
-          <p className="text-xs" style={{ color: "#8a95a5" }}>6 años - Aprende jugando</p>
-        </div>
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center">
-          <BookIcon size={18} color="#2563EB" strokeWidth={1.8} />
-        </div>
-      </motion.div>
-
-      {/* Daily parent tip */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
-        className="rounded-2xl p-3.5 my-4 flex items-start gap-2.5"
-        style={{ backgroundColor: "#fffbeb", border: "1px solid #fef3c7" }}
-      >
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: "#fef3c7" }}>
-          <HeartHandIcon size={16} color="#f59e0b" strokeWidth={1.8} />
-        </div>
-        <div className="flex-1">
-          <p className="text-[11px] uppercase tracking-wider mb-1" style={{ color: "#d97706", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
-            {dailyTips[0].source}
-          </p>
-          <p className="text-xs" style={{ color: "#92400e", lineHeight: 1.55 }}>
-            {dailyTips[0].text}
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Tab navigation */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="rounded-2xl p-1.5 flex gap-1 mb-5"
-        style={{ backgroundColor: bg, boxShadow: shadowInset }}
-      >
-        {tabs.map((t) => {
-          const active = activeTab === t.id;
-          return (
+    <AnimatePresence mode="wait">
+      {showCreateGoal ? (
+        /* ── Full-screen Create Goal Flow ── */
+        <motion.div
+          key="create-goal-screen"
+          initial={{ opacity: 0, x: 60 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 60 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="pb-8"
+        >
+          {/* Header */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3 mb-1">
             <button
-              key={t.id}
-              onClick={() => setActiveTab(t.id)}
-              className="flex-1 rounded-xl py-2.5 flex items-center justify-center gap-1.5 text-xs transition-all"
-              style={{
-                backgroundColor: active ? t.color : "transparent",
-                color: active ? "white" : "#8a95a5",
-                fontWeight: 600,
-                fontFamily: "'Nunito Sans', sans-serif",
-                boxShadow: active ? `0 2px 8px ${t.color}40` : "none",
-              }}
+              onClick={() => setShowCreateGoal(false)}
+              className="w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{ backgroundColor: bg, boxShadow: shadowOutSm }}
             >
-              <t.Icon size={14} color={active ? "white" : "#8a95a5"} strokeWidth={1.8} />
-              {t.label}
+              <ArrowLeft size={18} color="#2d3548" />
             </button>
-          );
-        })}
-      </motion.div>
+            <div className="flex-1">
+              <p style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>Nueva meta de ahorro</p>
+              <p className="text-xs" style={{ color: "#8a95a5" }}>Crea una meta con Sofi</p>
+            </div>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: "#FF784910" }}>
+              <TargetIcon size={18} color="#FF7849" strokeWidth={1.8} />
+            </div>
+          </motion.div>
 
-      {/* Tab content */}
-      <AnimatePresence mode="wait">
-        {activeTab === "misiones" && <MissionsTab key="misiones" />}
-        {activeTab === "metas" && <GoalsTab key="metas" />}
-        {activeTab === "cuentos" && <StoriesTab key="cuentos" />}
-      </AnimatePresence>
-    </div>
+          <div className="mt-5">
+            <CreateGoalFlow onClose={() => setShowCreateGoal(false)} />
+          </div>
+        </motion.div>
+      ) : (
+        /* ── Main Enseñar page ── */
+        <motion.div
+          key="teach-main"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, x: -30 }}
+          transition={{ duration: 0.25 }}
+          className="pb-8"
+        >
+          {/* Header */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3 mb-1">
+            <button onClick={onBack} className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: bg }}>
+              <ArrowLeft size={18} color="#2d3548" />
+            </button>
+            <div className="flex-1">
+              <p style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>Enseñar a Sofi</p>
+              <p className="text-xs" style={{ color: "#8a95a5" }}>6 años - Aprende jugando</p>
+            </div>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center">
+              <BookIcon size={18} color="#2563EB" strokeWidth={1.8} />
+            </div>
+          </motion.div>
+
+          {/* Daily parent tip */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="rounded-2xl p-3.5 my-4 flex items-start gap-2.5"
+            style={{ backgroundColor: "#fffbeb", border: "1px solid #fef3c7" }}
+          >
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: "#fef3c7" }}>
+              <HeartHandIcon size={16} color="#f59e0b" strokeWidth={1.8} />
+            </div>
+            <div className="flex-1">
+              <p className="text-[11px] uppercase tracking-wider mb-1" style={{ color: "#d97706", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                {dailyTips[0].source}
+              </p>
+              <p className="text-xs" style={{ color: "#92400e", lineHeight: 1.55 }}>
+                {dailyTips[0].text}
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Tab navigation */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="rounded-2xl p-1.5 flex gap-1 mb-5"
+            style={{ backgroundColor: bg, boxShadow: shadowInset }}
+          >
+            {tabs.map((t) => {
+              const active = activeTab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setActiveTab(t.id)}
+                  className="flex-1 rounded-xl py-2.5 flex items-center justify-center gap-1.5 text-xs transition-all"
+                  style={{
+                    backgroundColor: active ? t.color : "transparent",
+                    color: active ? "white" : "#8a95a5",
+                    fontWeight: 600,
+                    fontFamily: "'Nunito Sans', sans-serif",
+                    boxShadow: active ? `0 2px 8px ${t.color}40` : "none",
+                  }}
+                >
+                  <t.Icon size={14} color={active ? "white" : "#8a95a5"} strokeWidth={1.8} />
+                  {t.label}
+                </button>
+              );
+            })}
+          </motion.div>
+
+          {/* Tab content */}
+          <AnimatePresence mode="wait">
+            {activeTab === "misiones" && <MissionsTab key="misiones" />}
+            {activeTab === "metas" && <GoalsTab key="metas" onCreateGoal={() => setShowCreateGoal(true)} />}
+            {activeTab === "cuentos" && <StoriesTab key="cuentos" />}
+          </AnimatePresence>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
