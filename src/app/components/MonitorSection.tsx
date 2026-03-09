@@ -383,7 +383,7 @@ function CelebrationOverlay({ onClose }: { onClose: () => void }) {
             boxShadow: "0 4px 16px rgba(37,99,235,0.35)",
           }}
         >
-          Gracias, seguiré así
+          ¡Seguiré así!
         </motion.button>
       </motion.div>
     </motion.div>
@@ -680,7 +680,7 @@ export function MonitorSection({ onBack }: Props) {
               Premio listo
             </p>
             <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.85)", fontWeight: 500, lineHeight: 1.4 }}>
-              Toca para reclamar tu medalla
+              Toca para ver
             </p>
           </div>
 

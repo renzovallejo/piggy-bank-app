@@ -508,7 +508,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
             ¿Para qué quiere ahorrar Sofi?
           </p>
           <p className="text-xs mt-1" style={{ color: "#8a95a5" }}>
-            Elige una categoría o crea tu propia meta
+            Elige una categoría o crea una propia
           </p>
         </div>
 
@@ -572,7 +572,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
                 <p className="text-xs" style={{ color: selected ? custom.color : "#2d3548", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
                   Escribir mi propia meta
                 </p>
-                <p className="text-[11px]" style={{ color: "#b0b8c4" }}>Sofi decide para qué ahorrar</p>
+                <p className="text-[11px]" style={{ color: "#b0b8c4" }}>Sofi elige para qué ahorrar</p>
               </div>
               <SparklesIcon size={14} color={selected ? custom.color : "#b0b8c4"} strokeWidth={1.8} />
             </motion.button>
@@ -639,7 +639,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
             ¿Cuánto cuesta {goalName.toLowerCase()}?
           </p>
           <p className="text-xs mt-1" style={{ color: "#8a95a5" }}>
-            No te preocupes, puedes cambiarlo después
+            Puedes ajustarlo después
           </p>
         </div>
 
@@ -758,7 +758,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
             ¿En cuántas semanas lo lograremos?
           </p>
           <p className="text-xs mt-1" style={{ color: "#8a95a5" }}>
-            Sofi ahorrará un poquito cada semana
+            Un poquito cada semana
           </p>
         </div>
 
@@ -996,7 +996,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
         >
           <HeartHandIcon size={16} color="#f59e0b" strokeWidth={1.8} className="shrink-0 mt-0.5" />
           <p className="text-xs" style={{ color: "#92400e", lineHeight: 1.55 }}>
-            Cada vez que Sofi deposite dinero, verá cómo la barra avanza. ¡Celebra con ella cada progreso!
+            Cada depósito mueve la barra. ¡Celebra con Sofi cada avance!
           </p>
         </motion.div>
 

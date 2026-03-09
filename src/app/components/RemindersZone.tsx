@@ -430,7 +430,7 @@ function AllDoneCelebration({ totalXP }: { totalXP: number }) {
           className="text-xs"
           style={{ color: "rgba(255,255,255,0.85)" }}
         >
-          Sofi y tu ganaron +{totalXP} XP hoy
+          Sofi y tú ganaron +{totalXP} XP
         </motion.p>
       </div>
 

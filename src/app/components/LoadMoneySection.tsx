@@ -247,7 +247,7 @@ function MessageComposer({ amount, onSend, onBack }: { amount: string; onSend: (
           ¿Qué le quieres decir a Sofi?
         </p>
         <p className="text-xs mt-1" style={{ color: "#8a95a5", lineHeight: 1.5 }}>
-          Escribe un mensaje o graba un audio con cariño
+          Un texto o audio con cariño
         </p>
       </motion.div>
 
@@ -318,7 +318,6 @@ function MessageComposer({ amount, onSend, onBack }: { amount: string; onSend: (
                     <Mic size={32} color="white" strokeWidth={1.8} />
                   </motion.button>
                   <p className="text-sm" style={{ color: "#2d3548", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>Toca para grabar</p>
-                  <p className="text-[13px] mt-1" style={{ color: "#8a95a5" }}>Graba un mensaje de voz para Sofi</p>
                 </div>
               </motion.div>
             )}
@@ -355,7 +354,7 @@ function MessageComposer({ amount, onSend, onBack }: { amount: string; onSend: (
               <>
                 <AudioPreview seconds={recSeconds} onDelete={deleteRec} onReRecord={reRecord} />
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="rounded-xl px-4 py-3" style={{ backgroundColor: "#fff7ed" }}>
-                  <p className="text-[11px] text-center" style={{ color: "#FF7849", lineHeight: 1.5, fontWeight: 500 }}>Sofi escuchará tu mensaje de voz cuando abra su alcancía</p>
+                  <p className="text-[11px] text-center" style={{ color: "#FF7849", lineHeight: 1.5, fontWeight: 500 }}>Sofi lo escuchará al abrir su alcancía</p>
                 </motion.div>
               </>
             )}
@@ -366,11 +365,11 @@ function MessageComposer({ amount, onSend, onBack }: { amount: string; onSend: (
       {/* Send */}
       <motion.button initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} onClick={canSend ? onSend : undefined} disabled={!canSend} whileTap={canSend ? { scale: 0.97 } : {}} className="mt-6 w-full rounded-2xl p-4 flex items-center justify-center gap-2.5 transition-all" style={{ backgroundColor: canSend ? "#FF7849" : "#e8ecf1", boxShadow: canSend ? "6px 6px 16px rgba(255,120,73,0.3), -4px -4px 12px #ffffff" : "none", cursor: canSend ? "pointer" : "not-allowed" }}>
         <Send size={16} color={canSend ? "white" : "#b0b8c4"} strokeWidth={2} />
-        <span style={{ color: canSend ? "white" : "#b0b8c4", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>Enviar mensaje a Sofi</span>
+        <span style={{ color: canSend ? "white" : "#b0b8c4", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>Enviar a Sofi</span>
       </motion.button>
 
       <button onClick={onBack} className="w-full text-center mt-3 py-2">
-        <span className="text-xs" style={{ color: "#b0b8c4" }}>Omitir por ahora</span>
+        <span className="text-xs" style={{ color: "#b0b8c4" }}>Omitir</span>
       </button>
     </motion.div>
   );
@@ -400,7 +399,7 @@ function MessageSentScreen({ onDone }: { onDone: () => void }) {
           ¡Mensaje enviado!
         </p>
         <p className="text-sm" style={{ color: "#8a95a5", lineHeight: 1.6 }}>
-          Sofi recibirá tu mensaje con mucho cariño cuando abra su alcancía
+          Sofi lo recibirá al abrir su alcancía
         </p>
       </motion.div>
 
@@ -479,14 +478,10 @@ function SuccessScreen({ amount, onDone }: { amount: string; onDone: () => void 
         <p className="text-sm" style={{ color: "#8a95a5" }}>a la alcancía de Sofi</p>
       </motion.div>
 
-      <motion.div className="mt-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}>
-        <p className="text-xs" style={{ color: "#b0b8c4" }}>El saldo se actualizará en breve</p>
-      </motion.div>
-
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.4 }} className="mt-8 w-full space-y-3 relative z-10">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2 }} className="mt-8 w-full space-y-3 relative z-10">
         <button onClick={() => setView("message")} className="w-full rounded-2xl p-4 flex items-center justify-center gap-3 transition-all active:scale-[0.98]" style={{ backgroundColor: "#FF7849", boxShadow: "6px 6px 16px rgba(255,120,73,0.3), -4px -4px 12px #ffffff", cursor: "pointer" }}>
           <MessageCircle size={18} color="white" strokeWidth={2} />
-          <span style={{ color: "white", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>Agregar mensaje para Sofi</span>
+          <span style={{ color: "white", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>Enviar mensaje a Sofi</span>
         </button>
         <button onClick={onDone} className="w-full rounded-2xl p-4 flex items-center justify-center transition-all active:scale-[0.98]" style={{ backgroundColor: bg, boxShadow: shadowOut, cursor: "pointer" }}>
           <span style={{ color: "#2d3548", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>Volver al inicio</span>
@@ -530,7 +525,7 @@ function StepAmount({ amount, setAmount, onNext, onBack }: { amount: string; set
 
       <div className="flex flex-col items-center mb-6">
         <div className="w-24 h-24 mb-3"><PiggyBankSvg /></div>
-        <p className="text-sm text-center" style={{ color: "#8a95a5", fontFamily: "'Nunito Sans', sans-serif" }}>¿Cuánto quieres cargar a la alcancía de Sofi?</p>
+        <p className="text-sm text-center" style={{ color: "#8a95a5", fontFamily: "'Nunito Sans', sans-serif" }}>¿Cuánto quieres cargar?</p>
       </div>
 
       <div className="rounded-3xl p-6 mb-5" style={{ backgroundColor: bg, boxShadow: shadowOut }}>
@@ -549,8 +544,6 @@ function StepAmount({ amount, setAmount, onNext, onBack }: { amount: string; set
           })}
         </div>
       </div>
-
-      <p className="text-xs text-center mb-6" style={{ color: "#b0b8c4" }}>Elige un monto rápido o escribe uno personalizado</p>
 
       <button onClick={onNext} disabled={!isValid} className="w-full rounded-2xl p-4 flex items-center justify-center gap-2 transition-all active:scale-[0.98]" style={{ backgroundColor: isValid ? "#2563EB" : "#dde3ec", boxShadow: isValid ? "6px 6px 16px rgba(37,99,235,0.35), -4px -4px 12px #ffffff" : shadowOut, cursor: isValid ? "pointer" : "not-allowed" }}>
         <span style={{ color: isValid ? "white" : "#8a95a5", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>Continuar</span>
@@ -579,8 +572,6 @@ function StepMethod({ selectedMethod, setSelectedMethod, amount, onNext, onBack 
           <span className="text-sm" style={{ fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700, color: "#2563EB" }}>S/ {parseFloat(amount || "0").toFixed(2)}</span>
         </div>
       </div>
-
-      <p className="text-sm text-center mb-5" style={{ color: "#8a95a5", fontFamily: "'Nunito Sans', sans-serif" }}>¿Cómo deseas hacer la carga?</p>
 
       <div className="space-y-3 mb-8">
         {paymentMethods.map((m) => {
@@ -636,7 +627,7 @@ function StepConfirm({ amount, selectedMethod, onConfirm, onBack }: { amount: st
           <div className="w-20 h-20"><PiggyBankSvg /></div>
         </div>
         <div className="text-center mb-5">
-          <p className="text-xs uppercase tracking-widest mb-1" style={{ color: "#8a95a5", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 500, letterSpacing: "0.15em" }}>Monto a cargar</p>
+          <p className="text-xs uppercase tracking-widest mb-1" style={{ color: "#8a95a5", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 500, letterSpacing: "0.15em" }}>Monto</p>
           <p className="text-4xl tracking-tighter" style={{ fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700, color: "#2d3548" }}>S/ {parseFloat(amount || "0").toFixed(2)}</p>
         </div>
         <div className="h-px w-full mb-5" style={{ backgroundColor: "#e8ecf1" }} />
@@ -670,7 +661,7 @@ function StepConfirm({ amount, selectedMethod, onConfirm, onBack }: { amount: st
       </motion.div>
 
       <motion.button initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} onClick={onConfirm} className="w-full rounded-2xl p-4 flex items-center justify-center gap-2 transition-all active:scale-[0.98]" style={{ backgroundColor: "#2563EB", boxShadow: "6px 6px 16px rgba(37,99,235,0.35), -4px -4px 12px #ffffff", cursor: "pointer" }}>
-        <span style={{ color: "white", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>Confirmar carga</span>
+        <span style={{ color: "white", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>Confirmar</span>
       </motion.button>
 
       <div className="flex justify-center gap-4 mt-4">
@@ -904,7 +895,7 @@ function CoinDepositStep({
             ¿Cómo quieres depositar?
           </p>
           <p className="text-xs text-center mt-1" style={{ color: textSecondary, lineHeight: 1.5 }}>
-            Elige una forma de cargar S/ {numAmount.toFixed(2)}
+            S/ {numAmount.toFixed(2)} listos para depositar
           </p>
         </motion.div>
 
@@ -922,7 +913,7 @@ function CoinDepositStep({
               </div>
               <div className="flex-1">
                 <p className="text-sm" style={{ color: textPrimary, fontWeight: 700, fontFamily }}>Depósito rápido</p>
-                <p className="text-xs mt-0.5" style={{ color: textSecondary, lineHeight: 1.4 }}>Las monedas caen automáticamente en la alcancía</p>
+                <p className="text-xs mt-0.5" style={{ color: textSecondary, lineHeight: 1.4 }}>Las monedas caen automáticamente</p>
               </div>
               <ChevronRight size={18} color="#d1d9e6" />
             </div>
@@ -946,7 +937,7 @@ function CoinDepositStep({
               </div>
               <div className="flex-1">
                 <p className="text-sm" style={{ color: textPrimary, fontWeight: 700, fontFamily }}>Depósito junto a Sofi</p>
-                <p className="text-xs mt-0.5" style={{ color: textSecondary, lineHeight: 1.4 }}>Arrastra las monedas con el dedo hasta la alcancía</p>
+                <p className="text-xs mt-0.5" style={{ color: textSecondary, lineHeight: 1.4 }}>Arrastra las monedas a la alcancía</p>
               </div>
               <ChevronRight size={18} color="#d1d9e6" />
             </div>
@@ -988,7 +979,7 @@ function CoinDepositStep({
 
       {mode === "together" && !allDeposited && (
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }} className="text-xs text-center mb-2" style={{ color: textSecondary }}>
-          Arrastra cada moneda hasta la alcancía
+          Arrastra cada moneda a la alcancía
         </motion.p>
       )}
 
@@ -1063,7 +1054,7 @@ function CoinDepositStep({
               <Check size={32} color="white" strokeWidth={3} />
             </motion.div>
             <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-sm" style={{ color: textPrimary, fontWeight: 700, fontFamily }}>
-              ¡Todas las monedas depositadas!
+              ¡Monedas depositadas!
             </motion.p>
           </motion.div>
         )}

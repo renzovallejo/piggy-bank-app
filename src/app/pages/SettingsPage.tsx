@@ -335,7 +335,7 @@ export function SettingsPage() {
         />
 
         <p className="text-[13px] mb-4" style={{ color: "#8a95a5", lineHeight: 1.5 }}>
-          Administra las cuentas y métodos vinculados para cargar dinero a la alcancía de Sofi.
+          Cuentas vinculadas para cargar dinero.
         </p>
 
         {/* BCP */}
@@ -488,7 +488,7 @@ export function SettingsPage() {
         />
 
         <p className="text-[13px] mb-4" style={{ color: "#8a95a5", lineHeight: 1.5 }}>
-          Selecciona qué datos puede registrar la alcancía para personalizar la experiencia educativa de Sofi.
+          Datos que registra la alcancía para personalizar la experiencia de Sofi.
         </p>
 
         <div className="border-b" style={{ borderColor: "#f0f2f5" }}>
@@ -545,7 +545,7 @@ export function SettingsPage() {
                 Certificado de seguridad activo
               </p>
               <p className="text-[13px]" style={{ color: "#22c55e", lineHeight: 1.5, fontWeight: 500 }}>
-                Conexión cifrada TLS 1.3 entre la alcancía y la app. Los datos viajan protegidos en todo momento.
+                Conexión cifrada TLS 1.3. Los datos viajan protegidos.
               </p>
             </div>
           </div>
@@ -555,19 +555,19 @@ export function SettingsPage() {
         <div className="space-y-3">
           <PrivacyItem
             title="Uso exclusivamente educativo"
-            description="Los datos recolectados se usan solo para mejorar la experiencia de aprendizaje financiero de Sofi. Nunca se comparten con terceros ni se usan con fines comerciales."
+            description="Los datos mejoran la experiencia educativa de Sofi. No se comparten con terceros."
           />
           <PrivacyItem
             title="Sin datos personales sensibles"
-            description="La alcancía no recolecta nombres completos, direcciones, fotos ni información biométrica. Solo registra patrones de ahorro anonimizados."
+            description="No se recolectan nombres, direcciones, fotos ni datos biométricos. Solo patrones de ahorro anonimizados."
           />
           <PrivacyItem
             title="Control total para los padres"
-            description="Puedes desactivar cualquier tipo de recolección de datos en cualquier momento desde esta pantalla. Los datos se eliminan al desactivarlos."
+            description="Desactiva la recolección en cualquier momento. Los datos se eliminan al hacerlo."
           />
           <PrivacyItem
             title="Almacenamiento local seguro"
-            description="Los datos se almacenan de forma cifrada en el dispositivo. Las sincronizaciones con la nube usan encriptación de extremo a extremo."
+            description="Datos cifrados en el dispositivo. Sincronización con encriptación de extremo a extremo."
           />
         </div>
 

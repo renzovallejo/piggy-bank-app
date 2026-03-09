@@ -26,7 +26,7 @@ const initialNotifications: Notification[] = [
     id: "1",
     type: "deposito",
     title: "Depósito recibido",
-    message: "Se registraron S/ 5.00 en la alcancía de Sofi. Total acumulado: S/ 47.50",
+    message: "S/ 5.00 registrados. Total: S/ 47.50",
     time: "Hace 2 horas",
     read: false,
   },
@@ -34,7 +34,7 @@ const initialNotifications: Notification[] = [
     id: "2",
     type: "logro",
     title: "Misión completada",
-    message: "Sofi completó la misión \"Separar monedas por tamaño\". Ganó 15 puntos de experiencia.",
+    message: "Sofi completó \"Separar monedas por tamaño\". +15 XP",
     time: "Hace 5 horas",
     read: false,
   },
@@ -50,7 +50,7 @@ const initialNotifications: Notification[] = [
     id: "4",
     type: "meta",
     title: "Meta casi lista",
-    message: "La meta \"Bicicleta nueva\" está al 85%. Faltan solo S/ 22.50 para completarla.",
+    message: "\"Bicicleta nueva\" al 85%. Faltan S/ 22.50",
     time: "Ayer",
     read: true,
   },
@@ -58,7 +58,7 @@ const initialNotifications: Notification[] = [
     id: "5",
     type: "sistema",
     title: "Batería baja",
-    message: "La alcancía tiene 15% de batería. Conéctala para que siga registrando los ahorros de Sofi.",
+    message: "15% de batería. Conéctala para seguir registrando.",
     time: "Ayer",
     read: true,
   },
@@ -66,7 +66,7 @@ const initialNotifications: Notification[] = [
     id: "6",
     type: "deposito",
     title: "Depósito recibido",
-    message: "Se registraron S/ 2.00 en la alcancía de Sofi. Total acumulado: S/ 42.50",
+    message: "S/ 2.00 registrados. Total: S/ 42.50",
     time: "Hace 2 días",
     read: true,
   },
@@ -74,7 +74,7 @@ const initialNotifications: Notification[] = [
     id: "7",
     type: "logro",
     title: "Racha de 5 días",
-    message: "Sofi lleva 5 días seguidos ahorrando. Su constancia es admirable.",
+    message: "Sofi lleva 5 días ahorrando. ¡Gran constancia!",
     time: "Hace 3 días",
     read: true,
   },
@@ -82,7 +82,7 @@ const initialNotifications: Notification[] = [
     id: "8",
     type: "tip",
     title: "Nuevo cuento disponible",
-    message: "\"El jardín mágico de las monedas\" ya está listo para leer con Sofi antes de dormir.",
+    message: "\"El jardín mágico de las monedas\" ya está disponible.",
     time: "Hace 3 días",
     read: true,
   },
@@ -213,7 +213,7 @@ export function NotificationsPage() {
               Sin avisos pendientes
             </p>
             <p className="text-xs text-center" style={{ color: "#8a95a5", lineHeight: 1.5 }}>
-              Cuando haya novedades sobre Sofi y su alcancía, aparecerán aquí.
+              Las novedades aparecerán aquí.
             </p>
           </div>
         ) : (

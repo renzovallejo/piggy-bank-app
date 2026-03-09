@@ -39,7 +39,7 @@ export function SectionCards({ onMonitor, onTeach }: Props) {
             Monitorear
           </p>
           <p className="text-xs" style={{ color: "#8a95a5", fontWeight: 400, lineHeight: 1.4 }}>
-            Progreso y evolución de Sofi
+            Evolución de Sofi
           </p>
         </div>
 
@@ -91,7 +91,7 @@ export function SectionCards({ onMonitor, onTeach }: Props) {
             Enseñar
           </p>
           <p className="text-xs" style={{ color: "#8a95a5", fontWeight: 400, lineHeight: 1.4 }}>
-            Tips y actividades financieras
+            Actividades financieras
           </p>
         </div>
 
