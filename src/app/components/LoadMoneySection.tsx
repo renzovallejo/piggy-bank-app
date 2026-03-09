@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   ArrowLeft,
@@ -16,7 +16,20 @@ import {
 } from "lucide-react";
 import { PiggyBankSvg } from "./PiggyBankSvg";
 import { CoinIcon } from "./Icons";
-import { bg, shadowOut, shadowOutSm, shadowInset } from "./designTokens";
+import {
+  bg,
+  shadowOut,
+  shadowOutSm,
+  shadowInset,
+  shadowBlue,
+  colorBlue,
+  colorOrange,
+  colorGreen,
+  textPrimary,
+  textSecondary,
+  textMuted,
+  fontFamily,
+} from "./designTokens";
 
 const presetAmounts = [5, 10, 20, 50];
 
@@ -667,6 +680,398 @@ function StepConfirm({ amount, selectedMethod, onConfirm, onBack }: { amount: st
   );
 }
 
+/* ── Coin SVG (gold coin for deposit animation) ── */
+function CoinSvg({ size = 48, value }: { size?: number; value?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="22" fill="#FFD700" stroke="#DAA520" strokeWidth="2.5" />
+      <circle cx="24" cy="24" r="16" fill="none" stroke="#DAA520" strokeWidth="1.5" />
+      <text x="24" y="30" textAnchor="middle" fill="#B8860B" fontSize={value ? "11" : "20"} fontWeight="bold" fontFamily={fontFamily}>
+        {value || "S"}
+      </text>
+    </svg>
+  );
+}
+
+/* ── Deposit burst (sparkle explosion on drop) ── */
+function DepositBurst({ x, y }: { x: number; y: number }) {
+  const lines = Array.from({ length: 8 }, (_, i) => {
+    const angle = (i / 8) * Math.PI * 2;
+    return { id: i, dx: Math.cos(angle) * 40, dy: Math.sin(angle) * 40 };
+  });
+
+  return (
+    <motion.div
+      className="absolute pointer-events-none"
+      style={{ left: x, top: y, zIndex: 30 }}
+      initial={{ opacity: 1 }}
+      animate={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      {lines.map((l) => (
+        <motion.div
+          key={l.id}
+          className="absolute w-2 h-2 rounded-full"
+          style={{ backgroundColor: "#FFD700", left: -4, top: -4 }}
+          initial={{ x: 0, y: 0, scale: 1 }}
+          animate={{ x: l.dx, y: l.dy, scale: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        />
+      ))}
+      <motion.div
+        className="absolute rounded-full"
+        style={{ width: 60, height: 60, left: -30, top: -30, border: "3px solid #FFD700" }}
+        initial={{ scale: 0, opacity: 0.8 }}
+        animate={{ scale: 2, opacity: 0 }}
+        transition={{ duration: 0.5 }}
+      />
+    </motion.div>
+  );
+}
+
+/* ── Draggable coin (drag to piggy bank) ── */
+function DraggableCoin({
+  index, posX, posY, value, piggyRef, onDeposit,
+}: {
+  index: number;
+  posX: number;
+  posY: number;
+  value: string;
+  piggyRef: React.RefObject<HTMLDivElement | null>;
+  onDeposit: (index: number, pointerX: number, pointerY: number) => void;
+}) {
+  const [deposited, setDeposited] = useState(false);
+  const [isNear, setIsNear] = useState(false);
+  const coinRef = useRef<HTMLDivElement>(null);
+
+  const checkOverlap = useCallback(() => {
+    const coinEl = coinRef.current;
+    const piggyEl = piggyRef.current;
+    if (!coinEl || !piggyEl) return false;
+    const cRect = coinEl.getBoundingClientRect();
+    const pRect = piggyEl.getBoundingClientRect();
+    const cx = cRect.left + cRect.width / 2;
+    const cy = cRect.top + cRect.height / 2;
+    const px = pRect.left + pRect.width / 2;
+    const py = pRect.top + pRect.height / 2;
+    const dist = Math.sqrt((cx - px) ** 2 + (cy - py) ** 2);
+    setIsNear(dist < 120);
+    return dist < 80;
+  }, [piggyRef]);
+
+  const handleDragEnd = useCallback(() => {
+    if (deposited) return;
+    if (checkOverlap()) {
+      const coinEl = coinRef.current;
+      if (coinEl) {
+        const r = coinEl.getBoundingClientRect();
+        setDeposited(true);
+        onDeposit(index, r.left + r.width / 2, r.top + r.height / 2);
+      }
+    }
+  }, [deposited, checkOverlap, index, onDeposit]);
+
+  if (deposited) return null;
+
+  return (
+    <motion.div
+      ref={coinRef}
+      className="absolute cursor-grab active:cursor-grabbing"
+      style={{
+        left: `calc(50% + ${posX}px)`,
+        top: `calc(50% + ${posY}px)`,
+        marginLeft: -72,
+        marginTop: -72,
+        zIndex: 20,
+        touchAction: "none",
+      }}
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: isNear ? 1.2 : 1 }}
+      transition={{ delay: 0.1 + index * 0.08, type: "spring", stiffness: 300, damping: 15 }}
+      drag
+      dragSnapToOrigin
+      dragElastic={0.1}
+      dragMomentum={false}
+      onDrag={() => checkOverlap()}
+      onDragEnd={handleDragEnd}
+      whileDrag={{ scale: 1.15, zIndex: 50 }}
+      whileTap={{ scale: 1.1 }}
+    >
+      <motion.div
+        animate={isNear ? { boxShadow: "0 0 20px rgba(255,215,0,0.6)" } : { boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
+        className="rounded-full"
+      >
+        <CoinSvg size={144} value={value} />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ── Step 3: Coin deposit animation ── */
+function CoinDepositStep({
+  amount,
+  onComplete,
+  onBack,
+}: {
+  amount: string;
+  onComplete: () => void;
+  onBack: () => void;
+}) {
+  type Mode = "choose" | "quick" | "together";
+  const [mode, setMode] = useState<Mode>("choose");
+  const [depositedCount, setDepositedCount] = useState(0);
+  const [bursts, setBursts] = useState<{ id: number; x: number; y: number }[]>([]);
+  const [piggyScale, setPiggyScale] = useState(1);
+
+  const piggyRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const burstId = useRef(0);
+
+  const numAmount = parseFloat(amount || "0");
+  const coinCount = Math.min(Math.max(Math.ceil(numAmount / 5), 3), 8);
+  const coinValue = (numAmount / coinCount).toFixed(0);
+
+  const coinPositions = useRef(
+    Array.from({ length: 8 }, (_, i) => {
+      const angle = (i / 8) * Math.PI * 2 - Math.PI / 2;
+      const rx = 100 + Math.random() * 20;
+      const ry = 60 + Math.random() * 20;
+      return { id: i, x: Math.cos(angle) * rx, y: Math.sin(angle) * ry + 30 };
+    }),
+  ).current.slice(0, coinCount);
+
+  const [coinStates, setCoinStates] = useState<boolean[]>(() => Array(coinCount).fill(false));
+
+  const handleDeposit = useCallback(
+    (index: number, pointerX: number, pointerY: number) => {
+      setCoinStates((prev) => { const next = [...prev]; next[index] = true; return next; });
+      setDepositedCount((c) => c + 1);
+      setPiggyScale(1.12);
+      setTimeout(() => setPiggyScale(1), 200);
+      const cRect = containerRef.current?.getBoundingClientRect();
+      if (cRect) {
+        burstId.current += 1;
+        const bid = burstId.current;
+        setBursts((prev) => [...prev, { id: bid, x: pointerX - cRect.left, y: pointerY - cRect.top }]);
+        setTimeout(() => setBursts((prev) => prev.filter((b) => b.id !== bid)), 700);
+      }
+    },
+    [],
+  );
+
+  const allDeposited = depositedCount >= coinCount;
+
+  useEffect(() => {
+    if (allDeposited && mode !== "choose") {
+      const t = setTimeout(onComplete, 1200);
+      return () => clearTimeout(t);
+    }
+  }, [allDeposited, mode, onComplete]);
+
+  useEffect(() => {
+    if (mode !== "quick") return;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    coinPositions.forEach((_, i) => {
+      timers.push(
+        setTimeout(() => {
+          const piggyEl = piggyRef.current;
+          if (piggyEl) {
+            const rect = piggyEl.getBoundingClientRect();
+            handleDeposit(i, rect.left + rect.width / 2, rect.top + rect.height / 3);
+          }
+        }, 400 + i * 300),
+      );
+    });
+    return () => timers.forEach(clearTimeout);
+  }, [mode, coinPositions, handleDeposit]);
+
+  // ── View A: Mode chooser ──
+  if (mode === "choose") {
+    return (
+      <motion.div key="deposit-choose" initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: 0.3 }} className="pb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <button onClick={onBack} className="w-10 h-10 rounded-xl flex items-center justify-center transition-all active:scale-95" style={{ backgroundColor: bg, boxShadow: shadowOutSm }}>
+            <ArrowLeft size={18} color={textPrimary} />
+          </button>
+          <p style={{ color: textPrimary, fontWeight: 700, fontFamily }}>Depositar</p>
+        </div>
+
+        <StepDots current={2} total={3} />
+
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex flex-col items-center mb-8">
+          <div className="w-28 h-28 mb-4"><PiggyBankSvg /></div>
+          <p className="text-sm text-center" style={{ color: textPrimary, fontWeight: 600, fontFamily }}>
+            ¿Cómo quieres depositar?
+          </p>
+          <p className="text-xs text-center mt-1" style={{ color: textSecondary, lineHeight: 1.5 }}>
+            Elige una forma de cargar S/ {numAmount.toFixed(2)}
+          </p>
+        </motion.div>
+
+        <div className="space-y-3">
+          <motion.button
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => setMode("quick")}
+            className="w-full rounded-2xl p-5 text-left transition-all"
+            style={{ backgroundColor: bg, boxShadow: shadowOut }}
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: colorBlue, boxShadow: "0 6px 20px rgba(37,99,235,0.3)" }}>
+                <CoinIcon size={26} color="white" strokeWidth={1.8} />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm" style={{ color: textPrimary, fontWeight: 700, fontFamily }}>Depósito rápido</p>
+                <p className="text-xs mt-0.5" style={{ color: textSecondary, lineHeight: 1.4 }}>Las monedas caen automáticamente en la alcancía</p>
+              </div>
+              <ChevronRight size={18} color="#d1d9e6" />
+            </div>
+          </motion.button>
+
+          <motion.button
+            initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => setMode("together")}
+            className="w-full rounded-2xl p-5 text-left transition-all"
+            style={{ backgroundColor: bg, boxShadow: shadowOut }}
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: colorOrange, boxShadow: "0 6px 20px rgba(255,120,73,0.3)" }}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                  <circle cx="9" cy="7" r="3.5" stroke="white" strokeWidth="1.8" />
+                  <path d="M2 20v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V20" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+                  <circle cx="18" cy="9" r="2.5" stroke="white" strokeWidth="1.8" />
+                  <path d="M19 13.5a4 4 0 0 1 3 3.8V20" stroke="white" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm" style={{ color: textPrimary, fontWeight: 700, fontFamily }}>Depósito junto a Sofi</p>
+                <p className="text-xs mt-0.5" style={{ color: textSecondary, lineHeight: 1.4 }}>Arrastra las monedas con el dedo hasta la alcancía</p>
+              </div>
+              <ChevronRight size={18} color="#d1d9e6" />
+            </div>
+          </motion.button>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // ── View B: Interactive deposit ──
+  return (
+    <motion.div key="deposit-interactive" ref={containerRef} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} className="relative pb-8 overflow-hidden" style={{ minHeight: "80vh", touchAction: "none" }}>
+      <div className="flex items-center gap-3 mb-2 relative z-20">
+        <button onClick={onBack} className="w-10 h-10 rounded-xl flex items-center justify-center transition-all active:scale-95" style={{ backgroundColor: bg, boxShadow: shadowOutSm }}>
+          <ArrowLeft size={18} color={textPrimary} />
+        </button>
+        <p style={{ color: textPrimary, fontWeight: 700, fontFamily }}>
+          {mode === "quick" ? "Depositando..." : "Arrastra las monedas"}
+        </p>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mb-4 relative z-20">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs" style={{ color: textSecondary, fontFamily }}>{depositedCount} de {coinCount} monedas</span>
+          <span className="text-xs" style={{ color: colorBlue, fontWeight: 700, fontFamily }}>
+            S/ {((numAmount * depositedCount) / coinCount).toFixed(2)}
+          </span>
+        </div>
+        <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: "#e8ecf1" }}>
+          <motion.div
+            className="h-2 rounded-full"
+            style={{ backgroundColor: colorBlue }}
+            animate={{ width: `${(depositedCount / coinCount) * 100}%` }}
+            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+          />
+        </div>
+      </div>
+
+      {mode === "together" && !allDeposited && (
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }} className="text-xs text-center mb-2" style={{ color: textSecondary }}>
+          Arrastra cada moneda hasta la alcancía
+        </motion.p>
+      )}
+
+      {/* Piggy bank target */}
+      <div className="flex justify-center" style={{ marginTop: mode === "together" ? 20 : 40 }}>
+        <motion.div ref={piggyRef} animate={{ scale: piggyScale }} transition={{ type: "spring", stiffness: 400, damping: 15 }} className="relative">
+          <motion.div
+            className="absolute rounded-full -z-10"
+            style={{ width: 180, height: 180, left: "50%", top: "50%", transform: "translate(-50%, -50%)", backgroundColor: "rgba(37,99,235,0.06)" }}
+            animate={mode === "together" && !allDeposited ? { scale: [1, 1.15, 1], opacity: [0.4, 0.8, 0.4] } : {}}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2 -top-1 z-10"
+            style={{ width: 40, height: 6, borderRadius: 3, backgroundColor: "#DAA520" }}
+            animate={mode === "together" && !allDeposited ? { scaleX: [1, 1.2, 1] } : {}}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          />
+          <div className="w-36 h-36"><PiggyBankSvg /></div>
+          <motion.div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1" style={{ backgroundColor: bg, boxShadow: shadowOutSm }}>
+            <span className="text-[11px]" style={{ color: colorBlue, fontWeight: 700, fontFamily }}>S/ {numAmount.toFixed(2)}</span>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Burst particles */}
+      {bursts.map((b) => <DepositBurst key={b.id} x={b.x} y={b.y} />)}
+
+      {/* Coins area */}
+      <div className="relative flex justify-center" style={{ marginTop: 60, height: 200 }}>
+        {coinPositions.map((pos, i) => {
+          if (coinStates[i]) return null;
+          if (mode === "quick") {
+            return (
+              <motion.div
+                key={pos.id}
+                className="absolute"
+                style={{ left: `calc(50% + ${pos.x}px)`, top: `calc(50% + ${pos.y}px)`, marginLeft: -72, marginTop: -72, zIndex: 15 }}
+                initial={{ opacity: 1, scale: 1 }}
+                animate={{ y: -280, scale: [1, 1.15, 0.3], opacity: [1, 1, 0], rotate: [0, 180, 360] }}
+                transition={{ duration: 0.8, delay: 0.4 + i * 0.3, ease: "easeIn", times: [0, 0.5, 1] }}
+              >
+                <CoinSvg size={144} value={coinValue} />
+              </motion.div>
+            );
+          }
+          return (
+            <DraggableCoin
+              key={pos.id}
+              index={i}
+              posX={pos.x}
+              posY={pos.y}
+              value={coinValue}
+              piggyRef={piggyRef}
+              onDeposit={handleDeposit}
+            />
+          );
+        })}
+      </div>
+
+      {/* All deposited overlay */}
+      <AnimatePresence>
+        {allDeposited && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="absolute inset-0 flex flex-col items-center justify-center z-30 pointer-events-none">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 12 }}
+              className="w-16 h-16 rounded-full flex items-center justify-center mb-3"
+              style={{ backgroundColor: colorGreen, boxShadow: "0 8px 24px rgba(34,197,94,0.35)" }}
+            >
+              <Check size={32} color="white" strokeWidth={3} />
+            </motion.div>
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-sm" style={{ color: textPrimary, fontWeight: 700, fontFamily }}>
+              ¡Todas las monedas depositadas!
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
 /* ── Main component ── */
 interface Props {
   onBack: () => void;
@@ -686,8 +1091,10 @@ export function LoadMoneySection({ onBack }: Props) {
 
   return (
     <AnimatePresence mode="wait">
-      {step === 3 ? (
+      {step === 4 ? (
         <SuccessScreen key="success" amount={amount} onDone={handleDone} />
+      ) : step === 3 ? (
+        <CoinDepositStep key="s3" amount={amount} onComplete={() => setStep(4)} onBack={() => setStep(2)} />
       ) : step === 0 ? (
         <StepAmount key="s0" amount={amount} setAmount={setAmount} onNext={() => setStep(1)} onBack={onBack} />
       ) : step === 1 ? (
