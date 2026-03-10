@@ -34,9 +34,11 @@ export function HomePage() {
             >
               <BellIcon size={17} color="#2563EB" strokeWidth={1.8} />
               <div
-                className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full"
+                className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1"
                 style={{ backgroundColor: "#FF7849", boxShadow: "0 2px 6px rgba(255,120,73,0.5)" }}
-              />
+              >
+                <span className="text-[10px] text-white leading-none" style={{ fontWeight: 700 }}>3</span>
+              </div>
             </button>
             <button
               onClick={() => navigate("/configuracion")}
@@ -53,9 +55,7 @@ export function HomePage() {
       <div className="px-5 space-y-7">
         <BalanceCard />
         <ActiveMissionCard />
-        <div onClick={() => navigate("/cargar")}>
-          <QuickActions />
-        </div>
+        <QuickActions onClick={() => navigate("/cargar")} />
         <SectionCards
           onMonitor={() => navigate("/monitorear")}
           onTeach={() => navigate("/ensenar")}

@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { CoinIcon } from "./Icons";
 import { shadowBlue } from "./designTokens";
 
-export function QuickActions() {
+export function QuickActions({ onClick }: { onClick?: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -10,6 +10,7 @@ export function QuickActions() {
       transition={{ duration: 0.5, delay: 0.3 }}
     >
       <button
+        onClick={onClick}
         className="w-full rounded-3xl p-5 flex items-center justify-between group cursor-pointer transition-transform active:scale-[0.98]"
         style={{
           backgroundColor: "#2563EB",

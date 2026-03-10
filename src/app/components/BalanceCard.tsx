@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { motion, useAnimation } from "motion/react";
+import { Eye, EyeOff } from "lucide-react";
 import { PiggyBankSvg } from "./PiggyBankSvg";
 import { bg, shadowOut } from "./designTokens";
 
@@ -36,9 +37,8 @@ export function BalanceCard() {
       transition={{ duration: 0.5, delay: 0.1 }}
     >
       <div
-        className="rounded-3xl p-5 cursor-pointer select-none flex gap-3"
+        className="rounded-3xl p-5 select-none flex gap-3"
         style={{ backgroundColor: bg, boxShadow: shadowOut }}
-        onClick={() => setRevealed(!revealed)}
       >
         {/* Info block — 60% */}
         <div className="flex-1 flex flex-col justify-center min-w-0">
@@ -50,14 +50,27 @@ export function BalanceCard() {
             >
               Alcancía de Sofi
             </p>
-            <div className="flex items-baseline gap-1.5">
-              <span
-                className="text-4xl tracking-tighter"
-                style={{ fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700, color: "#2d3548" }}
+            <div className="flex items-center gap-2">
+              <div className="flex items-baseline gap-1.5">
+                <span
+                  className="text-4xl tracking-tighter"
+                  style={{ fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700, color: "#2d3548" }}
+                >
+                  {revealed ? "S/ 34.60" : "S/ •••••"}
+                </span>
+                <span className="text-xs" style={{ color: "#8a95a5", fontWeight: 500 }}>PEN</span>
+              </div>
+              <button
+                onClick={() => setRevealed(!revealed)}
+                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 cursor-pointer"
+                style={{ backgroundColor: "#2563EB10" }}
               >
-                {revealed ? "S/ 34.60" : "S/ •••••"}
-              </span>
-              <span className="text-xs" style={{ color: "#8a95a5", fontWeight: 500 }}>PEN</span>
+                {revealed ? (
+                  <Eye size={15} color="#8a95a5" strokeWidth={1.8} />
+                ) : (
+                  <EyeOff size={15} color="#8a95a5" strokeWidth={1.8} />
+                )}
+              </button>
             </div>
           </div>
         </div>

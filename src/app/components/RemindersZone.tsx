@@ -421,7 +421,7 @@ function AllDoneCelebration({ totalXP }: { totalXP: number }) {
           className="text-sm text-white"
           style={{ fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}
         >
-          Dia completado
+          Día completado
         </motion.p>
         <motion.p
           initial={{ opacity: 0 }}
@@ -460,9 +460,19 @@ function AllDoneCelebration({ totalXP }: { totalXP: number }) {
    MAIN COMPONENT
    ══════════════════════════════════════════ */
 
+/* ── Chevron icon for expand/collapse ── */
+function ChevronDownIcon({ size = 14, color = "#8a95a5" }: { size?: number; color?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 9l6 6 6-6" stroke={color} strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
 export function RemindersZone() {
   const { activeMission } = useMissions();
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
+  const [expanded, setExpanded] = useState(true);
 
   /* Build reminders list: mission step (if active) + daily habits */
   const reminders = useMemo<Reminder[]>(() => {
@@ -504,8 +514,11 @@ export function RemindersZone() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.18 }}
     >
-      {/* Section header */}
-      <div className="flex items-center justify-between mb-3">
+      {/* Section header — tappable to toggle */}
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between mb-3 cursor-pointer"
+      >
         <div className="flex items-center gap-2">
           <div
             className="w-7 h-7 rounded-lg flex items-center justify-center"
@@ -524,54 +537,87 @@ export function RemindersZone() {
           >
             Por completar
           </p>
+          <span
+            className="text-xs rounded-full px-2 py-0.5"
+            style={{
+              color: allDone ? "#22c55e" : "#2563EB",
+              backgroundColor: allDone ? "#22c55e12" : "#2563EB10",
+              fontWeight: 700,
+              fontFamily: "'Nunito Sans', sans-serif",
+            }}
+          >
+            {completedCount}/{reminders.length}
+          </span>
         </div>
 
-        {/* XP earned today */}
-        <AnimatePresence>
-          {totalXP > 0 && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center gap-1 rounded-full px-2.5 py-1"
-              style={{ backgroundColor: "#2563EB10" }}
-            >
-              <StarIcon size={12} color="#2563EB" strokeWidth={2} />
-              <span
-                className="text-xs"
-                style={{
-                  color: "#2563EB",
-                  fontWeight: 700,
-                  fontFamily: "'Nunito Sans', sans-serif",
-                }}
+        <div className="flex items-center gap-2">
+          {/* XP earned today */}
+          <AnimatePresence>
+            {totalXP > 0 && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center gap-1 rounded-full px-2.5 py-1"
+                style={{ backgroundColor: "#2563EB10" }}
               >
-                +{totalXP} XP
-              </span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+                <StarIcon size={12} color="#2563EB" strokeWidth={2} />
+                <span
+                  className="text-xs"
+                  style={{
+                    color: "#2563EB",
+                    fontWeight: 700,
+                    fontFamily: "'Nunito Sans', sans-serif",
+                  }}
+                >
+                  +{totalXP} XP
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Chevron */}
+          <motion.div
+            animate={{ rotate: expanded ? 180 : 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+          >
+            <ChevronDownIcon size={16} color="#8a95a5" />
+          </motion.div>
+        </div>
+      </button>
 
       {/* Progress */}
       <div className="mb-3">
         <ProgressBar completed={completedCount} total={reminders.length} totalXP={totalXP} />
       </div>
 
-      {/* Reminder items */}
-      <div className="space-y-2">
-        {reminders.map((r, i) => (
-          <ReminderItem
-            key={r.id}
-            reminder={r}
-            completed={completedIds.has(r.id)}
-            onComplete={() => handleComplete(r.id)}
-            index={i}
-          />
-        ))}
-      </div>
+      {/* Collapsible reminder items */}
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            style={{ overflow: "hidden" }}
+          >
+            <div className="space-y-2">
+              {reminders.map((r, i) => (
+                <ReminderItem
+                  key={r.id}
+                  reminder={r}
+                  completed={completedIds.has(r.id)}
+                  onComplete={() => handleComplete(r.id)}
+                  index={i}
+                />
+              ))}
+            </div>
 
-      {/* All-done celebration */}
-      <AnimatePresence>
-        {allDone && <AllDoneCelebration totalXP={totalXP} />}
+            {/* All-done celebration */}
+            <AnimatePresence>
+              {allDone && <AllDoneCelebration totalXP={totalXP} />}
+            </AnimatePresence>
+          </motion.div>
+        )}
       </AnimatePresence>
     </motion.div>
   );

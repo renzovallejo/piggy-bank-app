@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { ArrowLeft } from "lucide-react";
 import {
-  ChevronLeftIcon,
   BellIcon,
   CoinIcon,
   StarIcon,
@@ -124,18 +124,18 @@ export function NotificationsPage() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6 pt-2">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-1">
+      <div className="flex items-center gap-3">
         <button
           onClick={() => navigate("/")}
           className="w-10 h-10 rounded-xl flex items-center justify-center"
           style={{ backgroundColor: bg, boxShadow: shadowOut }}
         >
-          <ChevronLeftIcon size={18} color="#2d3548" strokeWidth={2} />
+          <ArrowLeft size={18} color="#2d3548" />
         </button>
         <div className="flex-1">
-          <p style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+          <p className="text-lg" style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
             Avisos
           </p>
           <p className="text-xs" style={{ color: "#8a95a5", fontWeight: 500 }}>
@@ -191,7 +191,7 @@ export function NotificationsPage() {
             className="text-xs px-3 py-2.5 rounded-lg"
             style={{ color: "#2563EB", fontWeight: 600, backgroundColor: "#eff6ff" }}
           >
-            Marcar todo
+            Marcar como leídas
           </button>
         )}
       </div>
@@ -200,7 +200,7 @@ export function NotificationsPage() {
       <div className="space-y-3">
         {filtered.length === 0 ? (
           <div
-            className="rounded-3xl p-8 flex flex-col items-center justify-center"
+            className="rounded-3xl p-10 flex flex-col items-center justify-center"
             style={{ backgroundColor: bg, boxShadow: shadowOut }}
           >
             <div
@@ -224,15 +224,15 @@ export function NotificationsPage() {
               <button
                 key={notif.id}
                 onClick={() => markAsRead(notif.id)}
-                className="w-full rounded-2xl p-4 text-left transition-transform active:scale-[0.98]"
+                className="w-full rounded-2xl p-5 text-left transition-transform active:scale-[0.98]"
                 style={{
                   backgroundColor: bg,
                   boxShadow: shadowOut,
                 }}
               >
-                <div className="flex gap-3">
+                <div className="flex gap-3.5">
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
+                    className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
                     style={{ backgroundColor: cfg.bg }}
                   >
                     <Icon size={18} color={cfg.color} strokeWidth={1.8} />
@@ -253,7 +253,7 @@ export function NotificationsPage() {
                       )}
                     </div>
                     <p
-                      className="text-[13px] mb-2"
+                      className="text-[13px] mb-2.5"
                       style={{
                         color: notif.read ? "#b0b8c4" : "#6b7280",
                         lineHeight: 1.45,
@@ -273,7 +273,7 @@ export function NotificationsPage() {
       </div>
 
       {/* Bottom spacer */}
-      <div className="h-4" />
+      <div className="h-6" />
     </div>
   );
 }

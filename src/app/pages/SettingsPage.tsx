@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { ArrowLeft } from "lucide-react";
 import {
-  ChevronLeftIcon,
   GearIcon,
   WifiIcon,
   BatteryIcon,
@@ -88,7 +88,7 @@ function StatusPill({ label, ok }: { label: string; ok: boolean }) {
 /* ---- Section Title ---- */
 function SectionTitle({ icon, label, color }: { icon: React.ReactNode; label: string; color: string }) {
   return (
-    <div className="flex items-center gap-2.5 mb-4">
+    <div className="flex items-center gap-2.5 mb-5">
       <div
         className="w-9 h-9 rounded-xl flex items-center justify-center"
         style={{ backgroundColor: color + "12" }}
@@ -117,7 +117,7 @@ function SettingRow({
   right: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-3 py-3.5">
+    <div className="flex items-center gap-3 py-4">
       <div
         className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
         style={{ backgroundColor: iconColor + "12" }}
@@ -162,18 +162,18 @@ export function SettingsPage() {
   const [yapeLinked, setYapeLinked] = useState(true);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-7 pt-2">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex items-center gap-3">
         <button
           onClick={() => navigate("/")}
           className="w-10 h-10 rounded-xl flex items-center justify-center"
           style={{ backgroundColor: bg, boxShadow: shadowOut }}
         >
-          <ChevronLeftIcon size={18} color="#2d3548" strokeWidth={2} />
+          <ArrowLeft size={18} color="#2d3548" />
         </button>
         <div className="flex-1">
-          <p style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+          <p className="text-lg" style={{ color: "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
             Configuración
           </p>
           <p className="text-xs" style={{ color: "#8a95a5", fontWeight: 500 }}>
@@ -190,7 +190,7 @@ export function SettingsPage() {
 
       {/* ======= DEVICE STATUS ======= */}
       <div
-        className="rounded-3xl p-5"
+        className="rounded-3xl p-6"
         style={{ backgroundColor: bg, boxShadow: shadowOut }}
       >
         <SectionTitle
@@ -200,7 +200,7 @@ export function SettingsPage() {
         />
 
         {/* Battery */}
-        <div className="flex items-center gap-3 py-3 border-b" style={{ borderColor: "#f0f2f5" }}>
+        <div className="flex items-center gap-3 py-3.5 border-b" style={{ borderColor: "#f0f2f5" }}>
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center"
             style={{ backgroundColor: batteryLevel > 20 ? "#f0fdf4" : "#fef2f2" }}
@@ -214,7 +214,6 @@ export function SettingsPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            {/* Mini battery bar */}
             <div className="w-16 h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: "#e8ecf2" }}>
               <div
                 className="h-full rounded-full"
@@ -231,7 +230,7 @@ export function SettingsPage() {
         </div>
 
         {/* WiFi */}
-        <div className="flex items-center gap-3 py-3">
+        <div className="flex items-center gap-3 py-3.5">
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center"
             style={{ backgroundColor: wifiConnected ? "#f0fdf4" : "#fef2f2" }}
@@ -250,7 +249,7 @@ export function SettingsPage() {
 
       {/* ======= DEVICE SETTINGS ======= */}
       <div
-        className="rounded-3xl p-5"
+        className="rounded-3xl p-6"
         style={{ backgroundColor: bg, boxShadow: shadowOut }}
       >
         <SectionTitle
@@ -272,7 +271,7 @@ export function SettingsPage() {
 
         {/* Piggy name */}
         <div className="border-b" style={{ borderColor: "#f0f2f5" }}>
-          <div className="flex items-center gap-3 py-3.5">
+          <div className="flex items-center gap-3 py-4">
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
               style={{ backgroundColor: "#FF784912" }}
@@ -315,7 +314,7 @@ export function SettingsPage() {
         </div>
 
         {/* Volume */}
-        <div className="py-3.5">
+        <div className="py-4">
           <p className="text-sm mb-3" style={{ color: "#2d3548", fontWeight: 600 }}>
             Volumen de la alcancía
           </p>
@@ -325,7 +324,7 @@ export function SettingsPage() {
 
       {/* ======= PAYMENT METHODS ======= */}
       <div
-        className="rounded-3xl p-5"
+        className="rounded-3xl p-6"
         style={{ backgroundColor: bg, boxShadow: shadowOut }}
       >
         <SectionTitle
@@ -334,13 +333,13 @@ export function SettingsPage() {
           color="#2563EB"
         />
 
-        <p className="text-[13px] mb-4" style={{ color: "#8a95a5", lineHeight: 1.5 }}>
+        <p className="text-[13px] mb-5" style={{ color: "#8a95a5", lineHeight: 1.5 }}>
           Cuentas vinculadas para cargar dinero.
         </p>
 
         {/* BCP */}
         <div
-          className="rounded-2xl p-4 mb-3"
+          className="rounded-2xl p-5 mb-4"
           style={{ backgroundColor: bcpLinked ? bg : "#f8f9fb", boxShadow: bcpLinked ? shadowOut : "none" }}
         >
           <div className="flex items-center gap-3 mb-3">
@@ -360,12 +359,12 @@ export function SettingsPage() {
           </div>
 
           {bcpLinked && (
-            <div className="rounded-xl px-3.5 py-3 mb-3" style={{ backgroundColor: "#f8f9fb" }}>
-              <div className="flex items-center justify-between mb-2">
+            <div className="rounded-xl px-4 py-3.5 mb-3" style={{ backgroundColor: "#f8f9fb" }}>
+              <div className="flex items-center justify-between mb-2.5">
                 <span className="text-xs" style={{ color: "#8a95a5" }}>Titular</span>
                 <span className="text-xs" style={{ color: "#2d3548", fontWeight: 600 }}>María Elena Ríos</span>
               </div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-2.5">
                 <span className="text-xs" style={{ color: "#8a95a5" }}>Cuenta</span>
                 <span className="text-xs tracking-wide" style={{ color: "#2d3548", fontWeight: 600, fontFamily: "monospace" }}>191-2634****-0-53</span>
               </div>
@@ -404,7 +403,7 @@ export function SettingsPage() {
 
         {/* Yape */}
         <div
-          className="rounded-2xl p-4"
+          className="rounded-2xl p-5"
           style={{ backgroundColor: yapeLinked ? bg : "#f8f9fb", boxShadow: yapeLinked ? shadowOut : "none" }}
         >
           <div className="flex items-center gap-3 mb-3">
@@ -424,12 +423,12 @@ export function SettingsPage() {
           </div>
 
           {yapeLinked && (
-            <div className="rounded-xl px-3.5 py-3 mb-3" style={{ backgroundColor: "#f8f9fb" }}>
-              <div className="flex items-center justify-between mb-2">
+            <div className="rounded-xl px-4 py-3.5 mb-3" style={{ backgroundColor: "#f8f9fb" }}>
+              <div className="flex items-center justify-between mb-2.5">
                 <span className="text-xs" style={{ color: "#8a95a5" }}>Titular</span>
                 <span className="text-xs" style={{ color: "#2d3548", fontWeight: 600 }}>María Elena Ríos</span>
               </div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-2.5">
                 <span className="text-xs" style={{ color: "#8a95a5" }}>Celular</span>
                 <span className="text-xs tracking-wide" style={{ color: "#2d3548", fontWeight: 600, fontFamily: "monospace" }}>987 *** 412</span>
               </div>
@@ -468,7 +467,7 @@ export function SettingsPage() {
 
         {/* Add new method hint */}
         <button
-          className="w-full mt-4 rounded-xl py-3 flex items-center justify-center gap-2 text-xs transition-all active:scale-[0.97]"
+          className="w-full mt-5 rounded-xl py-3 flex items-center justify-center gap-2 text-xs transition-all active:scale-[0.97]"
           style={{ backgroundColor: bg, boxShadow: shadowInset, color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}
         >
           <CoinIcon size={14} color="#8a95a5" strokeWidth={1.8} />
@@ -478,7 +477,7 @@ export function SettingsPage() {
 
       {/* ======= DATA COLLECTION ======= */}
       <div
-        className="rounded-3xl p-5"
+        className="rounded-3xl p-6"
         style={{ backgroundColor: bg, boxShadow: shadowOut }}
       >
         <SectionTitle
@@ -487,7 +486,7 @@ export function SettingsPage() {
           color="#FF7849"
         />
 
-        <p className="text-[13px] mb-4" style={{ color: "#8a95a5", lineHeight: 1.5 }}>
+        <p className="text-[13px] mb-5" style={{ color: "#8a95a5", lineHeight: 1.5 }}>
           Datos que registra la alcancía para personalizar la experiencia de Sofi.
         </p>
 
@@ -522,7 +521,7 @@ export function SettingsPage() {
 
       {/* ======= SECURITY & PRIVACY ======= */}
       <div
-        className="rounded-3xl p-5"
+        className="rounded-3xl p-6"
         style={{ backgroundColor: bg, boxShadow: shadowOut }}
       >
         <SectionTitle
@@ -533,7 +532,7 @@ export function SettingsPage() {
 
         {/* Certificates */}
         <div
-          className="rounded-2xl p-4 mb-4"
+          className="rounded-2xl p-5 mb-5"
           style={{ backgroundColor: "#f0fdf4" }}
         >
           <div className="flex items-start gap-3">
@@ -572,7 +571,7 @@ export function SettingsPage() {
         </div>
 
         {/* Compliance badges */}
-        <div className="flex flex-wrap gap-2 mt-5">
+        <div className="flex flex-wrap gap-2 mt-6">
           {["COPPA", "GDPR-K", "ISO 27001", "Cifrado AES-256"].map((badge) => (
             <span
               key={badge}
@@ -591,7 +590,7 @@ export function SettingsPage() {
       </div>
 
       {/* Bottom spacer */}
-      <div className="h-4" />
+      <div className="h-6" />
     </div>
   );
 }
@@ -619,7 +618,7 @@ function TargetIconSmall() {
 function PrivacyItem({ title, description }: { title: string; description: string }) {
   return (
     <div
-      className="rounded-2xl p-4"
+      className="rounded-2xl p-5"
       style={{ backgroundColor: "#f8f9fb" }}
     >
       <p className="text-sm mb-1" style={{ color: "#2d3548", fontWeight: 600 }}>

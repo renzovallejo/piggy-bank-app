@@ -11,11 +11,11 @@ import { bg, shadowOut, shadowInset } from "./designTokens";
 
 type Tab = "home" | "cargar" | "monitorear" | "ensenar";
 
-const navItems: { Icon: typeof HomeIcon; tab: Tab; path: string }[] = [
-  { Icon: HomeIcon, tab: "home", path: "/" },
-  { Icon: CoinIcon, tab: "cargar", path: "/cargar" },
-  { Icon: TrendUpIcon, tab: "monitorear", path: "/monitorear" },
-  { Icon: BookIcon, tab: "ensenar", path: "/ensenar" },
+const navItems: { Icon: typeof HomeIcon; tab: Tab; label: string; path: string }[] = [
+  { Icon: HomeIcon, tab: "home", label: "Inicio", path: "/" },
+  { Icon: CoinIcon, tab: "cargar", label: "Cargar", path: "/cargar" },
+  { Icon: TrendUpIcon, tab: "monitorear", label: "Monitorear", path: "/monitorear" },
+  { Icon: BookIcon, tab: "ensenar", label: "Enseñar", path: "/ensenar" },
 ];
 
 const tabOrder: Tab[] = ["home", "cargar", "monitorear", "ensenar"];
@@ -74,17 +74,27 @@ export function RootLayout() {
                 <button
                   key={item.tab}
                   onClick={() => navigate(item.path)}
-                  className="flex items-center justify-center w-12 h-12 rounded-xl transition-all"
+                  className="flex flex-col items-center justify-center gap-1 w-14 h-14 rounded-xl transition-all"
                   style={{
                     backgroundColor: bg,
                     boxShadow: isActive ? shadowInset : "none",
                   }}
                 >
                   <item.Icon
-                    size={22}
+                    size={20}
                     color={isActive ? "#2563EB" : "#8a95a5"}
                     strokeWidth={isActive ? 2.2 : 1.8}
                   />
+                  <span
+                    className="text-[10px] leading-none"
+                    style={{
+                      color: isActive ? "#2563EB" : "#8a95a5",
+                      fontWeight: isActive ? 700 : 500,
+                      fontFamily: "'Nunito Sans', sans-serif",
+                    }}
+                  >
+                    {item.label}
+                  </span>
                 </button>
               );
             })}
