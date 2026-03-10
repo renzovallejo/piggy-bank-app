@@ -21,7 +21,7 @@ function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
     <button
       onClick={onToggle}
-      className="w-12 h-7 rounded-full relative transition-colors"
+      className="w-12 h-8 rounded-full relative transition-colors"
       style={{
         backgroundColor: on ? "#2563EB" : "#e2e6ed",
         boxShadow: shadowInset,
@@ -73,7 +73,7 @@ function VolumeSlider({ value, onChange }: { value: number; onChange: (v: number
 function StatusPill({ label, ok }: { label: string; ok: boolean }) {
   return (
     <span
-      className="text-[11px] px-2.5 py-1 rounded-full"
+      className="text-xs px-2.5 py-1 rounded-full"
       style={{
         color: ok ? "#16a34a" : "#dc2626",
         backgroundColor: ok ? "#f0fdf4" : "#fef2f2",
@@ -306,10 +306,10 @@ export function SettingsPage() {
             </div>
             <button
               onClick={() => setEditingName(!editingName)}
-              className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+              className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
               style={{ backgroundColor: bg, boxShadow: shadowOut }}
             >
-              <EditIcon size={14} color="#8a95a5" strokeWidth={1.8} />
+              <EditIcon size={16} color="#8a95a5" strokeWidth={1.8} />
             </button>
           </div>
         </div>
@@ -382,7 +382,7 @@ export function SettingsPage() {
                 className="flex-1 rounded-xl py-2.5 flex items-center justify-center gap-1.5 text-xs transition-all active:scale-[0.97]"
                 style={{ backgroundColor: bg, boxShadow: shadowOut, color: "#2d3548", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}
               >
-                <EditIcon size={13} color="#8a95a5" strokeWidth={1.8} />
+                <EditIcon size={14} color="#8a95a5" strokeWidth={1.8} />
                 Modificar
               </button>
             )}
@@ -396,7 +396,7 @@ export function SettingsPage() {
                 fontFamily: "'Nunito Sans', sans-serif",
               }}
             >
-              <LinkIcon size={13} color={bcpLinked ? "#dc2626" : "white"} strokeWidth={1.8} />
+              <LinkIcon size={14} color={bcpLinked ? "#dc2626" : "white"} strokeWidth={1.8} />
               {bcpLinked ? "Desvincular" : "Vincular"}
             </button>
           </div>
@@ -446,7 +446,7 @@ export function SettingsPage() {
                 className="flex-1 rounded-xl py-2.5 flex items-center justify-center gap-1.5 text-xs transition-all active:scale-[0.97]"
                 style={{ backgroundColor: bg, boxShadow: shadowOut, color: "#2d3548", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}
               >
-                <EditIcon size={13} color="#8a95a5" strokeWidth={1.8} />
+                <EditIcon size={14} color="#8a95a5" strokeWidth={1.8} />
                 Modificar
               </button>
             )}
@@ -460,7 +460,7 @@ export function SettingsPage() {
                 fontFamily: "'Nunito Sans', sans-serif",
               }}
             >
-              <LinkIcon size={13} color={yapeLinked ? "#dc2626" : "white"} strokeWidth={1.8} />
+              <LinkIcon size={14} color={yapeLinked ? "#dc2626" : "white"} strokeWidth={1.8} />
               {yapeLinked ? "Desvincular" : "Vincular"}
             </button>
           </div>
@@ -576,7 +576,7 @@ export function SettingsPage() {
           {["COPPA", "GDPR-K", "ISO 27001", "Cifrado AES-256"].map((badge) => (
             <span
               key={badge}
-              className="text-[11px] px-3 py-1.5 rounded-full"
+              className="text-xs px-3 py-1.5 rounded-full"
               style={{
                 color: "#16a34a",
                 backgroundColor: "#f0fdf4",

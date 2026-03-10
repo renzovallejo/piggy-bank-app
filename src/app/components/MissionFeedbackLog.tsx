@@ -69,18 +69,18 @@ export function MissionFeedbackLog() {
                   animate={{ opacity: [1, 0.3, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
-                <span className="text-[11px] uppercase tracking-wider" style={{ color: activeMission.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                <span className="text-xs uppercase tracking-wider" style={{ color: activeMission.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
                   En progreso
                 </span>
               </div>
               <p className="text-sm" style={{ color: "#2d3548", fontWeight: 600 }}>{activeMission.title}</p>
               <div className="flex items-center gap-2 mt-0.5">
-                <ClockIcon size={9} color="#b0b8c4" strokeWidth={1.8} />
+                <ClockIcon size={14} color="#b0b8c4" strokeWidth={1.8} />
                 <span className="text-xs" style={{ color: "#b0b8c4" }}>Iniciada el {activeMission.startedAt}</span>
               </div>
             </div>
             <div className="shrink-0 px-2.5 py-1 rounded-full" style={{ backgroundColor: `${activeMission.color}10` }}>
-              <span className="text-[11px]" style={{ color: activeMission.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+              <span className="text-xs" style={{ color: activeMission.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
                 +{activeMission.xp} XP
               </span>
             </div>
@@ -106,7 +106,7 @@ export function MissionFeedbackLog() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 mb-0.5">
-                    <CheckCircleIcon size={11} color="#22c55e" strokeWidth={2} />
+                    <CheckCircleIcon size={14} color="#22c55e" strokeWidth={2} />
                     <span className="text-xs" style={{ color: "#22c55e", fontWeight: 600 }}>Completada</span>
                   </div>
                   <p className="text-sm" style={{ color: "#2d3548", fontWeight: 600 }}>{m.title}</p>
@@ -122,7 +122,7 @@ export function MissionFeedbackLog() {
               {/* Feedback tags */}
               {m.feedback.length > 0 && (
                 <div>
-                  <p className="text-[11px] uppercase tracking-wider mb-1.5" style={{ color: "#b0b8c4", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
+                  <p className="text-xs uppercase tracking-wider mb-1.5" style={{ color: "#b0b8c4", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
                     Feedback de mamá
                   </p>
                   <div className="flex flex-wrap gap-1.5">

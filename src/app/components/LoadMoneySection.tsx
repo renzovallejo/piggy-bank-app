@@ -160,7 +160,7 @@ function AudioPreview({ seconds, onDelete, onReRecord }: { seconds: number; onDe
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl p-5" style={{ backgroundColor: bg, boxShadow: shadowOut }}>
       <div className="flex items-center gap-2 mb-4">
-        <Mic size={13} color="#FF7849" strokeWidth={2} />
+        <Mic size={14} color="#FF7849" strokeWidth={2} />
         <span className="text-[13px]" style={{ color: "#8a95a5", fontWeight: 500 }}>Mensaje de voz grabado</span>
       </div>
       <div className="flex items-center gap-3">
@@ -187,7 +187,7 @@ function AudioPreview({ seconds, onDelete, onReRecord }: { seconds: number; onDe
       </div>
       <div className="flex items-center gap-2 mt-4">
         <button onClick={onReRecord} className="flex-1 rounded-xl py-2.5 flex items-center justify-center gap-1.5 text-xs transition-all active:scale-[0.97]" style={{ backgroundColor: "#f7f8fa", color: "#8a95a5", fontWeight: 600 }}>
-          <Mic size={12} strokeWidth={2} />
+          <Mic size={14} strokeWidth={2} />
           Volver a grabar
         </button>
         <button onClick={onDelete} className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all active:scale-[0.95]" style={{ backgroundColor: "#fef2f2" }}>
@@ -254,11 +254,11 @@ function MessageComposer({ amount, onSend, onBack }: { amount: string; onSend: (
       {/* Tab toggle */}
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-2xl p-1.5 flex gap-1 mb-5" style={{ backgroundColor: bg, boxShadow: shadowInset }}>
         <button onClick={() => setTab("text")} className="flex-1 rounded-xl py-2.5 flex items-center justify-center gap-2 text-xs transition-all" style={{ backgroundColor: tab === "text" ? "#2563EB" : "transparent", color: tab === "text" ? "white" : "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", boxShadow: tab === "text" ? "0 2px 8px rgba(37,99,235,0.3)" : "none" }}>
-          <Send size={13} strokeWidth={2} />
+          <Send size={14} strokeWidth={2} />
           Escribir
         </button>
         <button onClick={() => setTab("audio")} className="flex-1 rounded-xl py-2.5 flex items-center justify-center gap-2 text-xs transition-all" style={{ backgroundColor: tab === "audio" ? "#FF7849" : "transparent", color: tab === "audio" ? "white" : "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", boxShadow: tab === "audio" ? "0 2px 8px rgba(255,120,73,0.3)" : "none" }}>
-          <Mic size={13} strokeWidth={2} />
+          <Mic size={14} strokeWidth={2} />
           Grabar audio
         </button>
       </motion.div>
@@ -282,17 +282,17 @@ function MessageComposer({ amount, onSend, onBack }: { amount: string; onSend: (
                   <div className="h-1 rounded-full overflow-hidden" style={{ width: 60, backgroundColor: "#e8ecf1" }}>
                     <motion.div className="h-1 rounded-full" style={{ backgroundColor: text.length > 180 ? "#ef4444" : "#2563EB" }} animate={{ width: `${Math.min(100, (text.length / 200) * 100)}%` }} />
                   </div>
-                  <span className="text-[11px] tabular-nums" style={{ color: text.length > 180 ? "#ef4444" : "#b0b8c4" }}>{text.length}/200</span>
+                  <span className="text-xs tabular-nums" style={{ color: text.length > 180 ? "#ef4444" : "#b0b8c4" }}>{text.length}/200</span>
                 </div>
                 {text.length > 0 && (
-                  <button onClick={() => setText("")} className="text-xs px-2 py-1 rounded-md" style={{ color: "#8a95a5", backgroundColor: "#f7f8fa" }}>
+                  <button onClick={() => setText("")} className="text-xs px-3 py-2 rounded-md" style={{ color: "#8a95a5", backgroundColor: "#f7f8fa" }}>
                     Borrar
                   </button>
                 )}
               </div>
             </div>
             <div>
-              <p className="text-[11px] uppercase tracking-widest mb-2.5" style={{ color: "#b0b8c4", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 500, letterSpacing: "0.15em" }}>Ideas rápidas</p>
+              <p className="text-xs uppercase tracking-widest mb-2.5" style={{ color: "#b0b8c4", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 500, letterSpacing: "0.15em" }}>Ideas rápidas</p>
               <div className="flex flex-wrap gap-2">
                 {quickReasons.map((r) => {
                   const active = text === r;
@@ -354,7 +354,7 @@ function MessageComposer({ amount, onSend, onBack }: { amount: string; onSend: (
               <>
                 <AudioPreview seconds={recSeconds} onDelete={deleteRec} onReRecord={reRecord} />
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="rounded-xl px-4 py-3" style={{ backgroundColor: "#fff7ed" }}>
-                  <p className="text-[11px] text-center" style={{ color: "#FF7849", lineHeight: 1.5, fontWeight: 500 }}>Sofi lo escuchará al abrir su alcancía</p>
+                  <p className="text-xs text-center" style={{ color: "#FF7849", lineHeight: 1.5, fontWeight: 500 }}>Sofi lo escuchará al abrir su alcancía</p>
                 </motion.div>
               </>
             )}
@@ -590,11 +590,11 @@ function StepMethod({ selectedMethod, setSelectedMethod, amount, onNext, onBack 
               </div>
               <div className="rounded-xl px-3 py-2.5 flex items-center gap-3" style={{ backgroundColor: "#f7f8fa" }}>
                 <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${m.color}15` }}>
-                  <span className="text-[11px]" style={{ color: m.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>{m.bank === "BCP" ? "B" : "Y"}</span>
+                  <span className="text-xs" style={{ color: m.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>{m.bank === "BCP" ? "B" : "Y"}</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs truncate" style={{ color: "#2d3548", fontWeight: 600 }}>{m.account}</p>
-                  <p className="text-[11px] tracking-wide" style={{ color: "#8a95a5", fontFamily: "monospace" }}>{m.accountNumber}</p>
+                  <p className="text-xs tracking-wide" style={{ color: "#8a95a5", fontFamily: "monospace" }}>{m.accountNumber}</p>
                 </div>
                 <Check size={14} color="#22c55e" strokeWidth={2.5} />
               </div>
@@ -640,7 +640,7 @@ function StepConfirm({ amount, selectedMethod, onConfirm, onBack }: { amount: st
             <span className="text-xs" style={{ color: "#8a95a5" }}>Método</span>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ backgroundColor: method.color }}>
-                <method.Icon size={13} color="white" strokeWidth={2} />
+                <method.Icon size={14} color="white" strokeWidth={2} />
               </div>
               <span className="text-sm" style={{ color: "#2d3548", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>{method.label}</span>
             </div>
@@ -1000,7 +1000,7 @@ function CoinDepositStep({
           />
           <div className="w-36 h-36"><PiggyBankSvg /></div>
           <motion.div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1" style={{ backgroundColor: bg, boxShadow: shadowOutSm }}>
-            <span className="text-[11px]" style={{ color: colorBlue, fontWeight: 700, fontFamily }}>S/ {numAmount.toFixed(2)}</span>
+            <span className="text-xs" style={{ color: colorBlue, fontWeight: 700, fontFamily }}>S/ {numAmount.toFixed(2)}</span>
           </motion.div>
         </motion.div>
       </div>

@@ -466,7 +466,7 @@ function InsightsCarousel() {
               {insight.sources.map((s) => (
                 <span
                   key={s}
-                  className="text-[11px] px-2 py-0.5 rounded-full"
+                  className="text-xs px-2 py-0.5 rounded-full"
                   style={{ backgroundColor: `${insight.color}12`, color: insight.color, fontWeight: 600 }}
                 >
                   {s}
@@ -480,21 +480,23 @@ function InsightsCarousel() {
       <div className="flex items-center justify-between mt-4">
         <button
           onClick={prev}
-          className="w-8 h-8 rounded-full flex items-center justify-center"
+          className="w-10 h-10 rounded-full flex items-center justify-center"
           style={{ backgroundColor: bg, boxShadow: shadowOutSm }}
         >
-          <ChevronLeft size={15} color="#8a95a5" strokeWidth={2} />
+          <ChevronLeft size={16} color="#8a95a5" strokeWidth={2} />
         </button>
         <div className="flex items-center gap-1.5">
           {insights.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}
-              className="rounded-full transition-all"
+              className="rounded-full transition-all py-3"
               style={{
                 width: i === current ? 16 : 6,
-                height: 6,
+                backgroundClip: "content-box",
                 backgroundColor: i === current ? insight.color : "#d1d9e6",
+                height: 6,
+                boxSizing: "content-box",
                 transition: "all 0.3s",
               }}
             />
@@ -502,10 +504,10 @@ function InsightsCarousel() {
         </div>
         <button
           onClick={next}
-          className="w-8 h-8 rounded-full flex items-center justify-center"
+          className="w-10 h-10 rounded-full flex items-center justify-center"
           style={{ backgroundColor: bg, boxShadow: shadowOutSm }}
         >
-          <ChevronRight size={15} color="#8a95a5" strokeWidth={2} />
+          <ChevronRight size={16} color="#8a95a5" strokeWidth={2} />
         </button>
       </div>
     </motion.div>
@@ -592,7 +594,7 @@ export function MonitorSection({ onBack }: Props) {
               </div>
               <div className="w-px h-3" style={{ backgroundColor: "#e0e4ea" }} />
               <div className="flex items-center gap-1">
-                <CheckCircleIcon size={13} color="#2563EB" strokeWidth={2} />
+                <CheckCircleIcon size={14} color="#2563EB" strokeWidth={2} />
                 <span
                   className="text-xs"
                   style={{ color: "#2563EB", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}
@@ -606,7 +608,7 @@ export function MonitorSection({ onBack }: Props) {
 
         <div className="mt-4 rounded-xl px-4 py-3" style={{ backgroundColor: "#f0f5ff" }}>
           <p className="text-xs" style={{ color: "#2563EB", lineHeight: 1.5 }}>
-            <SeedlingIcon size={13} color="#2563EB" strokeWidth={2} className="inline-block mr-1 -mt-0.5" />
+            <SeedlingIcon size={14} color="#2563EB" strokeWidth={2} className="inline-block mr-1 -mt-0.5" />
             Este mes hizo <strong>{rawData.deposits.thisMonth} depósitos</strong>, escuchó{" "}
             <strong>{rawData.stories.listened} cuentos</strong> y completó{" "}
             <strong>{rawData.missions.thisMonth} misiones</strong>.
@@ -639,8 +641,8 @@ export function MonitorSection({ onBack }: Props) {
             S/ 34.60
           </p>
           <div className="flex items-center gap-1">
-            <TrendUpIcon size={11} color="#22c55e" strokeWidth={2.5} />
-            <span className="text-[11px]" style={{ color: "#22c55e", fontWeight: 600 }}>
+            <TrendUpIcon size={14} color="#22c55e" strokeWidth={2.5} />
+            <span className="text-xs" style={{ color: "#22c55e", fontWeight: 600 }}>
               +S/ 8.20 este mes
             </span>
           </div>
@@ -679,7 +681,7 @@ export function MonitorSection({ onBack }: Props) {
             >
               Premio listo
             </p>
-            <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.85)", fontWeight: 500, lineHeight: 1.4 }}>
+            <p className="text-xs" style={{ color: "rgba(255,255,255,0.85)", fontWeight: 500, lineHeight: 1.4 }}>
               Toca para ver
             </p>
           </div>
@@ -729,7 +731,7 @@ export function MonitorSection({ onBack }: Props) {
               >
                 {g.percent}%
               </p>
-              <p className="text-[11px]" style={{ color: "#8a95a5" }}>
+              <p className="text-xs" style={{ color: "#8a95a5" }}>
                 {g.saved} de {g.target}
               </p>
             </div>
@@ -778,14 +780,14 @@ export function MonitorSection({ onBack }: Props) {
                   <p className="text-sm truncate" style={{ color: "#2d3548", fontWeight: 600 }}>
                     {m.title}
                   </p>
-                  <p className="text-[11px]" style={{ color: "#8a95a5" }}>
+                  <p className="text-xs" style={{ color: "#8a95a5" }}>
                     {m.date}
                   </p>
                 </div>
 
                 <div className="px-2.5 py-1 rounded-full shrink-0" style={{ backgroundColor: `${m.color}10` }}>
                   <span
-                    className="text-[11px]"
+                    className="text-xs"
                     style={{ color: m.color, fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}
                   >
                     {m.type === "mission" ? "Misión" : "Ahorro"}

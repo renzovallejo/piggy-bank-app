@@ -318,17 +318,17 @@ function MissionsTab() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="text-[11px] uppercase tracking-wider" style={{ color: m.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                    <span className="text-xs uppercase tracking-wider" style={{ color: m.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
                       {m.methodologyTag}
                     </span>
-                    <span className="text-[11px] px-1.5 py-0.5 rounded-full" style={{ backgroundColor: `${difficultyColors[m.difficulty]}15`, color: difficultyColors[m.difficulty], fontWeight: 600 }}>
+                    <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: `${difficultyColors[m.difficulty]}15`, color: difficultyColors[m.difficulty], fontWeight: 600 }}>
                       {m.difficulty}
                     </span>
                   </div>
                   <p className="text-sm" style={{ color: "#2d3548", fontWeight: 600 }}>{m.title}</p>
                   <div className="flex items-center gap-3 mt-1.5">
                     <div className="flex items-center gap-1" style={{ color: "#a0aab8" }}>
-                      <ClockIcon size={10} color="#a0aab8" />
+                      <ClockIcon size={14} color="#a0aab8" />
                       <span className="text-xs" style={{ fontWeight: 500 }}>{m.time}</span>
                     </div>
                     <span className="text-xs" style={{ color: m.color, fontFamily: "'Nunito Sans', sans-serif", fontWeight: 700 }}>
@@ -355,14 +355,14 @@ function MissionsTab() {
                         <p className="text-xs" style={{ color: "#5a7094", lineHeight: 1.6 }}>{m.desc}</p>
                       </div>
 
-                      <p className="text-[11px] uppercase tracking-wider mb-2" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
+                      <p className="text-xs uppercase tracking-wider mb-2" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
                         Pasos de la misión
                       </p>
                       <div className="space-y-2 mb-3">
                         {m.steps.map((step, si) => (
                           <div key={si} className="flex items-start gap-2">
                             <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                              style={{ backgroundColor: `${m.color}10`, fontSize: 11, color: m.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                              style={{ backgroundColor: `${m.color}10`, fontSize: 12, color: m.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
                               {si + 1}
                             </div>
                             <p className="text-xs" style={{ color: "#5a7094", lineHeight: 1.5 }}>{step}</p>
@@ -373,7 +373,7 @@ function MissionsTab() {
                       <div className="rounded-xl p-3 mb-3 flex items-start gap-2.5" style={{ backgroundColor: "#fffbeb" }}>
                         <HeartHandIcon size={16} color="#FF7849" strokeWidth={1.8} className="shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-[11px] uppercase tracking-wider mb-1" style={{ color: "#FF7849", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                          <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "#FF7849", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
                             Tip para ti
                           </p>
                           <p className="text-[13px]" style={{ color: "#92400e", lineHeight: 1.5 }}>{m.parentTip}</p>
@@ -382,7 +382,7 @@ function MissionsTab() {
 
                       <div className="flex items-center gap-2">
                         <div className="flex-1 rounded-full px-2.5 py-1 flex items-center gap-1" style={{ backgroundColor: `${m.color}08` }}>
-                          <span className="text-[11px]" style={{ color: m.color, fontWeight: 600 }}>{m.methodology}</span>
+                          <span className="text-xs" style={{ color: m.color, fontWeight: 600 }}>{m.methodology}</span>
                         </div>
                         {activeMission?.id === m.id ? (
                           <div className="rounded-xl px-4 py-2.5 flex items-center gap-1.5"
@@ -572,7 +572,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
                 <p className="text-xs" style={{ color: selected ? custom.color : "#2d3548", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
                   Escribir mi propia meta
                 </p>
-                <p className="text-[11px]" style={{ color: "#b0b8c4" }}>Sofi elige para qué ahorrar</p>
+                <p className="text-xs" style={{ color: "#b0b8c4" }}>Sofi elige para qué ahorrar</p>
               </div>
               <SparklesIcon size={14} color={selected ? custom.color : "#b0b8c4"} strokeWidth={1.8} />
             </motion.button>
@@ -590,7 +590,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
               className="overflow-hidden"
             >
               <div className="mt-3 rounded-2xl p-3" style={{ backgroundColor: bg, boxShadow: shadowInset }}>
-                <label className="text-[11px] uppercase tracking-wider block mb-2"
+                <label className="text-xs uppercase tracking-wider block mb-2"
                   style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
                   ¿Para qué quiere ahorrar?
                 </label>
@@ -662,7 +662,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
             </motion.button>
 
             <div>
-              <p className="text-[11px] uppercase tracking-wider mb-1" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
+              <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
                 Meta de ahorro
               </p>
               <p className="text-3xl" style={{ color: accentColor, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
@@ -695,8 +695,8 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
               }}
             />
             <div className="flex justify-between mt-1.5">
-              <span className="text-[11px]" style={{ color: "#b0b8c4" }}>S/ {minAmount}</span>
-              <span className="text-[11px]" style={{ color: "#b0b8c4" }}>S/ {maxAmount}</span>
+              <span className="text-xs" style={{ color: "#b0b8c4" }}>S/ {minAmount}</span>
+              <span className="text-xs" style={{ color: "#b0b8c4" }}>S/ {maxAmount}</span>
             </div>
           </div>
         </motion.div>
@@ -707,7 +707,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <p className="text-[11px] uppercase tracking-wider mb-2.5" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
+          <p className="text-xs uppercase tracking-wider mb-2.5" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
             Montos sugeridos
           </p>
           <div className="flex gap-2">
@@ -785,7 +785,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
                 <span className="text-lg" style={{ color: weeks === w ? "white" : "#2d3548", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
                   {w}
                 </span>
-                <span className="text-[10px]" style={{ color: weeks === w ? "rgba(255,255,255,0.8)" : "#b0b8c4", fontWeight: 500 }}>
+                <span className="text-xs" style={{ color: weeks === w ? "rgba(255,255,255,0.8)" : "#b0b8c4", fontWeight: 500 }}>
                   {w === 1 ? "semana" : "semanas"}
                 </span>
               </motion.button>
@@ -814,7 +814,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
           className="rounded-2xl p-4"
           style={{ backgroundColor: bg, boxShadow: shadowOut }}
         >
-          <p className="text-[11px] uppercase tracking-wider mb-3"
+          <p className="text-xs uppercase tracking-wider mb-3"
             style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
             Así se verá el progreso
           </p>
@@ -830,8 +830,8 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
               />
             </div>
             <div className="flex justify-between mt-1.5">
-              <span className="text-[11px]" style={{ color: "#b0b8c4" }}>S/ 0</span>
-              <span className="text-[11px]" style={{ color: accentColor, fontWeight: 600 }}>S/ {amount}</span>
+              <span className="text-xs" style={{ color: "#b0b8c4" }}>S/ 0</span>
+              <span className="text-xs" style={{ color: accentColor, fontWeight: 600 }}>S/ {amount}</span>
             </div>
           </div>
           {/* Week markers */}
@@ -842,10 +842,10 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.5 + i * 0.08, type: "spring", stiffness: 400 }}
-                  className="w-4 h-4 rounded-full flex items-center justify-center"
+                  className="w-5 h-5 rounded-full flex items-center justify-center"
                   style={{
                     backgroundColor: i === 0 ? accentColor : `${accentColor}20`,
-                    fontSize: 8,
+                    fontSize: 10,
                     color: i === 0 ? "white" : accentColor,
                     fontWeight: 700,
                   }}
@@ -963,7 +963,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
                 <p className="text-xs" style={{ color: accentColor, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
                   {stat.value}
                 </p>
-                <p className="text-[10px]" style={{ color: "#b0b8c4" }}>{stat.label}</p>
+                <p className="text-xs" style={{ color: "#b0b8c4" }}>{stat.label}</p>
               </motion.div>
             ))}
           </div>
@@ -971,8 +971,8 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
           {/* Progress bar at 0% */}
           <div className="mt-4">
             <div className="flex justify-between mb-1.5">
-              <span className="text-[11px]" style={{ color: "#8a95a5", fontWeight: 500 }}>Progreso</span>
-              <span className="text-[11px]" style={{ color: accentColor, fontWeight: 600 }}>0%</span>
+              <span className="text-xs" style={{ color: "#8a95a5", fontWeight: 500 }}>Progreso</span>
+              <span className="text-xs" style={{ color: accentColor, fontWeight: 600 }}>0%</span>
             </div>
             <div className="h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: `${accentColor}15` }}>
               <motion.div
@@ -1032,7 +1032,7 @@ function CreateGoalFlow({ onClose }: { onClose: () => void }) {
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={step === 1 ? onClose : handleBack}
-            className="w-9 h-9 rounded-xl flex items-center justify-center"
+            className="w-10 h-10 rounded-xl flex items-center justify-center"
             style={{ backgroundColor: bg, boxShadow: shadowOutSm }}
           >
             {step === 1 ? <X size={16} color="#8a95a5" /> : <ArrowLeft size={16} color="#8a95a5" />}
@@ -1126,7 +1126,7 @@ function GoalsTab({ onCreateGoal }: { onCreateGoal: () => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <p className="text-[11px] uppercase tracking-wider mb-3" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
+        <p className="text-xs uppercase tracking-wider mb-3" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
           Consejos para una buena meta
         </p>
         <div className="space-y-2.5 mb-5">
@@ -1161,7 +1161,7 @@ function GoalsTab({ onCreateGoal }: { onCreateGoal: () => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
       >
-        <p className="text-[11px] uppercase tracking-wider mb-3" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
+        <p className="text-xs uppercase tracking-wider mb-3" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
           Ideas de metas para Sofi
         </p>
         <div className="grid grid-cols-2 gap-2.5 mb-5">
@@ -1184,8 +1184,8 @@ function GoalsTab({ onCreateGoal }: { onCreateGoal: () => void }) {
                 {idea.amount}
               </p>
               <div className="flex items-center gap-1 mt-1.5">
-                <ClockIcon size={9} color="#b0b8c4" strokeWidth={1.8} />
-                <span className="text-[11px]" style={{ color: "#b0b8c4" }}>{idea.time}</span>
+                <ClockIcon size={14} color="#b0b8c4" strokeWidth={1.8} />
+                <span className="text-xs" style={{ color: "#b0b8c4" }}>{idea.time}</span>
               </div>
             </motion.div>
           ))}
@@ -1200,7 +1200,7 @@ function GoalsTab({ onCreateGoal }: { onCreateGoal: () => void }) {
         className="rounded-2xl p-4 mb-5"
         style={{ backgroundColor: bg, boxShadow: shadowOut }}
       >
-        <p className="text-[11px] uppercase tracking-wider mb-3" style={{ color: "#FF7849", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
+        <p className="text-xs uppercase tracking-wider mb-3" style={{ color: "#FF7849", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif", letterSpacing: "0.12em" }}>
           Cómo crear una meta juntos
         </p>
         <div className="space-y-3">
@@ -1211,7 +1211,7 @@ function GoalsTab({ onCreateGoal }: { onCreateGoal: () => void }) {
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.6 + i * 0.08, type: "spring", stiffness: 300 }}
                 className="w-6 h-6 rounded-full flex items-center justify-center shrink-0"
-                style={{ backgroundColor: "#FF7849", fontSize: 11, color: "white", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}
+                style={{ backgroundColor: "#FF7849", fontSize: 12, color: "white", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}
               >
                 {s.num}
               </motion.div>
@@ -1294,10 +1294,10 @@ function StoriesTab() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[11px] px-1.5 py-0.5 rounded-full" style={{ backgroundColor: `${story.color}12`, color: story.color, fontWeight: 600 }}>
+                  <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: `${story.color}12`, color: story.color, fontWeight: 600 }}>
                     {story.ageTag}
                   </span>
-                  <span className="text-[11px] px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "#f0f2f5", color: "#8a95a5", fontWeight: 500 }}>
+                  <span className="text-xs px-1.5 py-0.5 rounded-full" style={{ backgroundColor: "#f0f2f5", color: "#8a95a5", fontWeight: 500 }}>
                     {story.chapters} capítulos
                   </span>
                 </div>
@@ -1309,17 +1309,17 @@ function StoriesTab() {
             {/* Lesson + CTA */}
             <div className="mt-3 pt-3 flex items-center gap-3" style={{ borderTop: "1px solid #f0f2f5" }}>
               <div className="flex-1 flex items-start gap-1.5">
-                <LightbulbIcon size={12} color={story.color} strokeWidth={1.8} className="shrink-0 mt-0.5" />
+                <LightbulbIcon size={14} color={story.color} strokeWidth={1.8} className="shrink-0 mt-0.5" />
                 <p className="text-xs" style={{ color: "#5a7094", lineHeight: 1.4 }}>{story.lesson}</p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <div className="flex items-center gap-1" style={{ color: "#b0b8c4" }}>
-                  <ClockIcon size={10} color="#b0b8c4" strokeWidth={1.8} />
+                  <ClockIcon size={14} color="#b0b8c4" strokeWidth={1.8} />
                   <span className="text-xs" style={{ fontWeight: 500 }}>{story.duration}</span>
                 </div>
-                <button className="w-8 h-8 rounded-lg flex items-center justify-center transition-all active:scale-[0.93]"
+                <button className="w-10 h-10 rounded-lg flex items-center justify-center transition-all active:scale-[0.93]"
                   style={{ backgroundColor: story.color, boxShadow: `2px 2px 6px ${story.color}35` }}>
-                  <ChevronRight size={14} color="white" strokeWidth={2.5} />
+                  <ChevronRight size={16} color="white" strokeWidth={2.5} />
                 </button>
               </div>
             </div>
@@ -1412,7 +1412,7 @@ export function TeachSection({ onBack }: Props) {
               <HeartHandIcon size={16} color="#f59e0b" strokeWidth={1.8} />
             </div>
             <div className="flex-1">
-              <p className="text-[11px] uppercase tracking-wider mb-1" style={{ color: "#d97706", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+              <p className="text-xs uppercase tracking-wider mb-1" style={{ color: "#d97706", fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
                 {dailyTips[0].source}
               </p>
               <p className="text-xs" style={{ color: "#92400e", lineHeight: 1.55 }}>

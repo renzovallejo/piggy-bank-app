@@ -118,9 +118,9 @@ function FloatingXP({ xp, color }: { xp: number; color: string }) {
       animate={{ opacity: [0, 1, 1, 0], y: [0, -8, -24, -36], scale: [0.5, 1.1, 1, 0.8] }}
       transition={{ duration: 1.2, ease: "easeOut" }}
     >
-      <StarIcon size={9} color="white" strokeWidth={2.5} />
+      <StarIcon size={12} color="white" strokeWidth={2.5} />
       <span
-        className="text-[11px] text-white"
+        className="text-xs text-white"
         style={{ fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}
       >
         +{xp} XP
@@ -305,7 +305,7 @@ function ReminderItem({
           </p>
           {reminder.subtitle && (
             <p
-              className="text-[11px] mt-0.5"
+              className="text-xs mt-0.5"
               style={{
                 color: completed ? "#d1d9e6" : "#8a95a5",
                 transition: "color 0.3s",
@@ -324,12 +324,12 @@ function ReminderItem({
           }}
         >
           <StarIcon
-            size={9}
+            size={12}
             color={completed ? "#d1d9e6" : reminder.color}
             strokeWidth={2}
           />
           <span
-            className="text-[11px]"
+            className="text-xs"
             style={{
               color: completed ? "#d1d9e6" : reminder.color,
               fontWeight: 700,
@@ -376,7 +376,7 @@ function ProgressBar({
       </div>
       <div className="flex items-center gap-1 shrink-0">
         <span
-          className="text-[11px] tabular-nums"
+          className="text-xs tabular-nums"
           style={{
             color: allDone ? "#22c55e" : "#8a95a5",
             fontWeight: 600,
@@ -535,9 +535,9 @@ export function RemindersZone() {
               className="flex items-center gap-1 rounded-full px-2.5 py-1"
               style={{ backgroundColor: "#2563EB10" }}
             >
-              <StarIcon size={10} color="#2563EB" strokeWidth={2} />
+              <StarIcon size={12} color="#2563EB" strokeWidth={2} />
               <span
-                className="text-[11px]"
+                className="text-xs"
                 style={{
                   color: "#2563EB",
                   fontWeight: 700,

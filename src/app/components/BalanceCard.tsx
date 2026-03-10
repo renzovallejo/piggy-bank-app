@@ -1,14 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, useAnimation } from "motion/react";
-import { TargetIcon, BikeIcon, GamepadIcon } from "./Icons";
 import { PiggyBankSvg } from "./PiggyBankSvg";
-import { bg, shadowOut, shadowOutSm } from "./designTokens";
-
-const goalIcons = [
-  { Icon: TargetIcon, color: "#2563EB" },
-  { Icon: BikeIcon, color: "#FF7849" },
-  { Icon: GamepadIcon, color: "#7C3AED" },
-];
+import { bg, shadowOut } from "./designTokens";
 
 export function BalanceCard() {
   const [revealed, setRevealed] = useState(true);
@@ -43,16 +36,16 @@ export function BalanceCard() {
       transition={{ duration: 0.5, delay: 0.1 }}
     >
       <div
-        className="rounded-3xl p-4 cursor-pointer select-none flex gap-3"
+        className="rounded-3xl p-5 cursor-pointer select-none flex gap-3"
         style={{ backgroundColor: bg, boxShadow: shadowOut }}
         onClick={() => setRevealed(!revealed)}
       >
         {/* Info block — 60% */}
-        <div className="flex-1 flex flex-col justify-between min-w-0 py-1">
+        <div className="flex-1 flex flex-col justify-center min-w-0">
           {/* Saldo */}
           <div>
             <p
-              className="text-[11px] tracking-widest uppercase mb-1"
+              className="text-xs tracking-widest uppercase mb-1"
               style={{ color: "#8a95a5", fontFamily: "'Nunito Sans', sans-serif", fontWeight: 500, letterSpacing: "0.15em" }}
             >
               Alcancía de Sofi
@@ -67,29 +60,11 @@ export function BalanceCard() {
               <span className="text-xs" style={{ color: "#8a95a5", fontWeight: 500 }}>PEN</span>
             </div>
           </div>
-
-          {/* Metas */}
-          <div className="flex items-center gap-2 mt-3">
-            <div className="flex gap-1.5">
-              {goalIcons.map((item, i) => (
-                <div
-                  key={i}
-                  className="w-7 h-7 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: bg, boxShadow: shadowOutSm }}
-                >
-                  <item.Icon size={12} color={item.color} strokeWidth={2.2} />
-                </div>
-              ))}
-            </div>
-            <span className="text-xs" style={{ color: "#8a95a5", fontWeight: 500 }}>
-              3 metas
-            </span>
-          </div>
         </div>
 
         {/* Piggy block — 40% */}
         <div
-          className="rounded-2xl flex items-center justify-center p-3"
+          className="rounded-2xl flex items-center justify-center p-0"
           style={{
             width: "40%",
             flexShrink: 0,

@@ -33,9 +33,6 @@ export function QuickActions() {
             >
               Cargar dinero
             </p>
-            <p className="text-blue-200 text-[13px]" style={{ fontWeight: 400 }}>
-              Transferencia · Tarjeta · Efectivo
-            </p>
           </div>
         </div>
         <div

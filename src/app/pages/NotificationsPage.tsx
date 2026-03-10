@@ -154,7 +154,7 @@ export function NotificationsPage() {
               className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
               style={{ backgroundColor: "#FF7849" }}
             >
-              <span className="text-[10px] text-white" style={{ fontWeight: 700 }}>
+              <span className="text-xs text-white" style={{ fontWeight: 700 }}>
                 {unreadCount}
               </span>
             </div>
@@ -172,7 +172,7 @@ export function NotificationsPage() {
             <button
               key={tab}
               onClick={() => setFilter(tab)}
-              className="px-4 py-1.5 rounded-lg text-xs transition-all"
+              className="px-4 py-2.5 rounded-lg text-xs transition-all"
               style={{
                 fontWeight: 600,
                 color: filter === tab ? "#2d3548" : "#8a95a5",
@@ -188,7 +188,7 @@ export function NotificationsPage() {
         {unreadCount > 0 && (
           <button
             onClick={markAllAsRead}
-            className="text-xs px-3 py-1.5 rounded-lg"
+            className="text-xs px-3 py-2.5 rounded-lg"
             style={{ color: "#2563EB", fontWeight: 600, backgroundColor: "#eff6ff" }}
           >
             Marcar todo

@@ -103,28 +103,28 @@ export function ActiveMissionCard() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 mb-0.5">
-                  <CompassIcon size={10} color={activeMission.color} strokeWidth={2} />
-                  <span className="text-[11px] uppercase tracking-wider" style={{ color: activeMission.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                  <CompassIcon size={14} color={activeMission.color} strokeWidth={2} />
+                  <span className="text-xs uppercase tracking-wider" style={{ color: activeMission.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
                     Misión activa
                   </span>
                 </div>
                 <p className="text-sm" style={{ color: "#2d3548", fontWeight: 600 }}>{activeMission.title}</p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <div className="flex items-center gap-1">
-                    <ClockIcon size={9} color="#b0b8c4" strokeWidth={1.8} />
-                    <span className="text-[11px]" style={{ color: "#b0b8c4" }}>{activeMission.time}</span>
+                    <ClockIcon size={14} color="#b0b8c4" strokeWidth={1.8} />
+                    <span className="text-xs" style={{ color: "#b0b8c4" }}>{activeMission.time}</span>
                   </div>
-                  <span className="text-[11px]" style={{ color: activeMission.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
+                  <span className="text-xs" style={{ color: activeMission.color, fontWeight: 700, fontFamily: "'Nunito Sans', sans-serif" }}>
                     +{activeMission.xp} XP
                   </span>
                 </div>
               </div>
               <button
                 onClick={dismissMission}
-                className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
                 style={{ backgroundColor: "#f0f2f5" }}
               >
-                <X size={12} color="#b0b8c4" strokeWidth={2} />
+                <X size={14} color="#b0b8c4" strokeWidth={2} />
               </button>
             </div>
 
@@ -158,7 +158,7 @@ export function ActiveMissionCard() {
                 className="overflow-hidden"
               >
                 <div className="px-4 pb-4" style={{ borderTop: "1px solid #f0f2f5" }}>
-                  <p className="text-[11px] uppercase tracking-wider mt-3 mb-2.5" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
+                  <p className="text-xs uppercase tracking-wider mt-3 mb-2.5" style={{ color: "#8a95a5", fontWeight: 600, fontFamily: "'Nunito Sans', sans-serif" }}>
                     ¿Cómo les fue?
                   </p>
                   <div className="flex flex-wrap gap-2 mb-3">
